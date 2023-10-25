@@ -1,11 +1,24 @@
 import React from 'react'
-import { SafeAreaView, Text, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import Tabs from '../../components/Tabs'
 
 const ClinicalRecords = () => {
+  const listTabs = [
+    {
+      key: 'List Clinical Records'
+    },
+    {
+      key: 'Create Clinical Record'
+    },
+    {
+      key: 'Export Clinical Records'
+    }
+  ]
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Clinical Records</Text>
-    </SafeAreaView>
+    <NavigationContainer independent={true}>
+      <Tabs listTabs={listTabs} />
+    </NavigationContainer>
   )
 }
 

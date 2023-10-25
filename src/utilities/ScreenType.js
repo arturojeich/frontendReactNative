@@ -28,5 +28,20 @@ export const screenType = {
     name: 'Create New',
     iconName: 'add',
     location: require('../screens/categories/CreateCategory')
+  },
+  'List Clinical Records': {
+    name: 'List Records',
+    iconName: 'format-list-bulleted',
+    location: require('../screens/clinicalrecords/ListClinicalRecords')
+  },
+  'Create Clinical Record': {
+    name: 'Create New',
+    iconName: 'add',
+    location: require('../screens/clinicalrecords/CreateClinicalRecord')
+  },
+  'Export Clinical Records': {
+    name: 'Export',
+    iconName: 'import-export',
+    location: require('../screens/clinicalrecords/ExportClinicalRecords')
   }
 }
