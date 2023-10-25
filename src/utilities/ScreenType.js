@@ -9,14 +9,24 @@ export const screenType = {
     iconName: 'add',
     location: require('../screens/appointments/CreateAppointment')
   },
+  'List People': {
+    name: 'List People',
+    iconName: 'format-list-bulleted',
+    location: require('../screens/people/ListPeople')
+  },
   'Create People': {
     name: 'Create New',
     iconName: 'add',
     location: require('../screens/people/CreatePeople')
   },
-  'List People': {
-    name: 'List People',
+  'List Categories': {
+    name: 'List Categories',
     iconName: 'format-list-bulleted',
-    location: require('../screens/people/ListPeople')
+    location: require('../screens/categories/ListCategories')
+  },
+  'Create Category': {
+    name: 'Create New',
+    iconName: 'add',
+    location: require('../screens/categories/CreateCategory')
   }
 }
