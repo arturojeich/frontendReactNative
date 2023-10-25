@@ -1,10 +1,10 @@
 import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Text } from 'react-native'
 
-const ListPeople = () => {
+const CreatePeople = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>List People</Text>
+      <Text style={styles.text}>Create Person</Text>
     </View>
   )
 }
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ListPeople
+export default CreatePeople

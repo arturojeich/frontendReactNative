@@ -1,11 +1,21 @@
 import React from 'react'
-import { SafeAreaView, Text, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native'
+import Tabs from '../../components/Tabs'
 
 const People = () => {
+  const listTabs = [
+    {
+      key: 'List People'
+    },
+    {
+      key: 'Create People'
+    }
+  ]
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>People</Text>
-    </SafeAreaView>
+    <NavigationContainer independent={true}>
+      <Tabs listTabs={listTabs} />
+    </NavigationContainer>
   )
 }
 

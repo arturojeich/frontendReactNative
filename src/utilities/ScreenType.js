@@ -8,5 +8,15 @@ export const screenType = {
     name: 'Create New',
     iconName: 'add',
     location: require('../screens/appointments/CreateAppointment')
+  },
+  'Create People': {
+    name: 'Create New',
+    iconName: 'add',
+    location: require('../screens/people/CreatePeople')
+  },
+  'List People': {
+    name: 'List People',
+    iconName: 'format-list-bulleted',
+    location: require('../screens/people/ListPeople')
   }
 }
