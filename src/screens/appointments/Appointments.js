@@ -20,14 +20,10 @@ import { MaterialIcons } from '@expo/vector-icons'
 const Appointments = () => {
   const listTabs = [
     {
-      key: 'List Appointments',
-      name: 'List',
-      iconName: 'list-alt'
+      key: 'List Appointments'
     },
     {
-      key: 'Create Appointment',
-      name: 'Create New',
-      iconName: 'add'
+      key: 'Create Appointment'
     }
   ]
   return (

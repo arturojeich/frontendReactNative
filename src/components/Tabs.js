@@ -6,15 +6,15 @@ import { screenType } from '../utilities/ScreenType'
 const Tab = createBottomTabNavigator()
 
 const Tabs = ({ listTabs }) => {
-  const tabs = listTabs.map(({ key, name, iconName }) => {
+  const tabs = listTabs.map(({ key }) => {
     return (
       <Tab.Screen
         key={key}
-        name={name}
+        name={screenType[key].name}
         options={{
           tabBarIcon: ({ focused }) => (
             <MaterialIcons
-              name={`${iconName}`}
+              name={screenType[key].iconName}
               size={25}
               color={focused ? 'black' : 'grey'}
             />
