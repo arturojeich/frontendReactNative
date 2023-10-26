@@ -8,7 +8,13 @@ import {
   update,
   remove
 } from 'firebase/database'
-import { ScrollView, View, Text, FlatList } from 'react-native'
+import {
+  ScrollView,
+  View,
+  ActivityIndicator,
+  Text,
+  FlatList
+} from 'react-native'
 import CategoryItem from '../components/CategoryItem'
 
 const ServiceCategories = () => {
@@ -24,10 +30,8 @@ const ServiceCategories = () => {
       setCategories(itemList)
     })
   }, [])
-  console.log('Categories: ' + JSON.stringify(categoriesList))
-  //console.log('Categories Descriptions: ' + categoriesList['abcde'])
+
   function getAllCategories() {
-    //console.log('Get All Categories')
     return (
       <ScrollView>
         <View>
@@ -36,9 +40,7 @@ const ServiceCategories = () => {
               <CategoryItem key={key} data={categoriesList[key]} id={key} />
             ))
           ) : (
-            //
-            //<Text key={key}>{key}</Text>
-            <Text>Nothing yet</Text>
+            <ActivityIndicator size={'large'} color={`black`} />
           )}
         </View>
       </ScrollView>
