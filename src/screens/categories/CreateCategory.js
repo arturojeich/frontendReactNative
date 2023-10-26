@@ -7,15 +7,9 @@ import {
   ScrollView,
   Button
 } from 'react-native'
-import {
-  getDatabase,
-  ref,
-  onValue,
-  push,
-  update,
-  remove
-} from 'firebase/database'
+
 import { CustomStyles } from '../../customStyles/CustomStyles'
+import { post } from '../../services/ServiceCategories'
 
 const CreateCategory = () => {
   //const [inputText, setInputText] = useState('')
@@ -42,7 +36,9 @@ const CreateCategory = () => {
         <View>
           <Button
             title="Guardar"
-            onPress={() => console.log('Guardando: ' + inputText)}
+            onPress={() => {
+              post({ descripcion: inputText })
+            }}
             color={CustomStyles.colors.mainBackground}
           />
         </View>

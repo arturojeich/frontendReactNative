@@ -17,6 +17,8 @@ import {
 } from 'react-native'
 import CategoryItem from '../components/CategoryItem'
 
+var post = null
+
 const ServiceCategories = () => {
   const [doneState, setDone] = useState(false)
   const [categoriesList, setCategories] = useState({})
@@ -58,9 +60,12 @@ const ServiceCategories = () => {
     console.log('Get Category')
   }
 
-  function postCategory() {
-    console.log('Create Category')
+  function postCategory(newCategory) {
+    console.log('Create Category, with descripcion: ' + newCategory.descripcion)
+    push(ref(db, '/administracion/categorias'), newCategory)
   }
+
+  post = postCategory
 
   function deleteCategory(key) {
     console.log('Delete Category, with KEY: ' + key)
@@ -76,3 +81,4 @@ const ServiceCategories = () => {
 }
 
 export default ServiceCategories
+export { post }
