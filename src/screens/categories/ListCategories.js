@@ -1,11 +1,12 @@
 import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import { Text, View, StyleSheet, SafeAreaView } from 'react-native'
+import ServiceCategories from '../../services/ServiceCategories'
 
 const ListCategories = () => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>List Categories</Text>
-    </View>
+    <SafeAreaView>
+      <ServiceCategories />
+    </SafeAreaView>
   )
 }
 

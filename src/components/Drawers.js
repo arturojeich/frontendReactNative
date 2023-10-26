@@ -7,6 +7,7 @@ import ClinicalRecords from '../screens/clinicalrecords/ClinicalRecords'
 import Appointments from '../screens/appointments/Appointments'
 import Categories from '../screens/categories/Categories'
 import People from '../screens/people/People'
+import { CustomStyles as style } from '../customStyles/CustomStyles'
 
 const Drawer = createDrawerNavigator()
 
@@ -15,11 +16,19 @@ const Drawers = () => {
     <Drawer.Navigator
       initialRouteName="Appointments"
       screenOptions={{
+        headerStyle: {
+          backgroundColor: style.colors.mainBackground
+        },
         headerTitleStyle: {
           fontWeight: 'bold',
           fontSize: 20,
           color: 'black'
-        }
+        },
+        drawerStyle: {
+          backgroundColor: style.colors.mainBackground
+        },
+        drawerActiveBackgroundColor: style.colors.secondaryBackground,
+        drawerActiveTintColor: style.colors.mainText
       }}
     >
       <Drawer.Screen

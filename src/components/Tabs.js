@@ -2,6 +2,7 @@ import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { MaterialIcons } from '@expo/vector-icons'
 import { screenType } from '../utilities/ScreenType'
+import { CustomStyles as style } from '../customStyles/CustomStyles'
 
 const Tab = createBottomTabNavigator()
 
@@ -28,13 +29,14 @@ const Tabs = ({ listTabs }) => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: 'black',
-        tabBarInactiveTintColor: 'grey',
+        tabBarActiveTintColor: style.colors.mainText,
+        tabBarInactiveTintColor: style.colors.primaryText,
+        tabBarActiveBackgroundColor: style.colors.primaryBackground,
         tabBarStyle: {
-          backgroundColor: 'white'
+          backgroundColor: style.colors.terciaryBackground
         },
         headerStyle: {
-          backgroundColor: 'white'
+          backgroundColor: style.colors.terciaryBackground
         },
         headerTitleStyle: {
           fontWeight: 'bold',
