@@ -37,7 +37,14 @@ const ServiceCategories = () => {
         <View>
           {categoriesKeys.length > 0 ? (
             categoriesKeys.map((key) => (
-              <CategoryItem key={key} data={categoriesList[key]} id={key} />
+              <CategoryItem
+                key={key}
+                data={categoriesList[key]}
+                id={key}
+                deleteFunction={deleteCategory}
+                putFunction={putCategory}
+                getFunction={getCategory}
+              />
             ))
           ) : (
             <ActivityIndicator size={'large'} color={`black`} />
@@ -55,8 +62,10 @@ const ServiceCategories = () => {
     console.log('Create Category')
   }
 
-  function deleteCategory() {
-    console.log('Delete Category')
+  function deleteCategory(key) {
+    console.log('Delete Category, with KEY: ' + key)
+    console.log(categoriesList[key])
+    remove(ref(db, `/administracion/categorias/${key}`))
   }
 
   function putCategory() {

@@ -1,8 +1,16 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Button } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
+import { CustomStyles } from '../customStyles/CustomStyles'
+import { confirm } from './Alerts'
 
-const CategoryItem = ({ data: { descripcion } }) => {
+const CategoryItem = ({
+  data: { descripcion },
+  id,
+  deleteFunction,
+  putFunction,
+  getFunction
+}) => {
   const { container, textTheme, buttons, shadowProp, data, elevation } = styles
   return (
     <View style={[container, shadowProp, elevation]}>
@@ -10,8 +18,28 @@ const CategoryItem = ({ data: { descripcion } }) => {
         <Text style={[textTheme]}>{descripcion}</Text>
       </View>
       <View style={[buttons]}>
-        <MaterialIcons name="edit" size={26} color="black" />
-        <MaterialIcons name="delete" size={26} color="black" />
+        <MaterialIcons.Button
+          name="edit"
+          size={26}
+          color="black"
+          style={{ marginRight: 0, marginLeft: 0 }}
+          backgroundColor={CustomStyles.colors.mainCard}
+          onPress={() => confirm('Editar', `${descripcion}?`)}
+        />
+        <MaterialIcons.Button
+          name="delete"
+          size={26}
+          color="black"
+          backgroundColor={CustomStyles.colors.mainCard}
+          onPress={() =>
+            confirm(
+              'Eliminar',
+              `Esta seguro de eliminar el item ${descripcion}?`,
+              deleteFunction,
+              id
+            )
+          }
+        />
       </View>
     </View>
   )
@@ -20,14 +48,15 @@ const CategoryItem = ({ data: { descripcion } }) => {
 const styles = StyleSheet.create({
   container: {
     height: 90,
-    width: '95%',
+    width: '100%',
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
     marginTop: 15,
     borderRadius: 10,
-    backgroundColor: '#F6F6F6'
+    paddingRight: 10,
+    backgroundColor: CustomStyles.colors.mainCard
   },
   textTheme: {
     fontWeight: 'bold',
@@ -44,10 +73,11 @@ const styles = StyleSheet.create({
   },
   buttons: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'center',
     alignItems: 'center',
     width: '20%',
     height: '100%',
+    marginRight: 10,
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10
   },

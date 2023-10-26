@@ -1,23 +1,18 @@
-const createTwoButtonAlert = () =>
-  Alert.alert('Alert Title', 'My Alert Msg', [
-    {
-      text: 'Cancel',
-      onPress: () => console.log('Cancel Pressed'),
-      style: 'cancel'
-    },
-    { text: 'OK', onPress: () => console.log('OK Pressed') }
-  ])
+import React from 'react'
+import { Alert } from 'react-native'
 
-const createThreeButtonAlert = () =>
-  Alert.alert('Alert Title', 'My Alert Msg', [
-    {
-      text: 'Ask me later',
-      onPress: () => console.log('Ask me later pressed')
-    },
+const confirm = (title, message, action, key) => {
+  Alert.alert(title, message, [
     {
       text: 'Cancel',
-      onPress: () => console.log('Cancel Pressed'),
+      onPress: () => console.log('Cancel pressed'),
       style: 'cancel'
     },
-    { text: 'OK', onPress: () => console.log('OK Pressed') }
+    {
+      text: 'OK',
+      onPress: () => action(key)
+    }
   ])
+}
+
+export { confirm }
