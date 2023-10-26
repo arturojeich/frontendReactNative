@@ -1,10 +1,10 @@
 export const CustomStyles = {
   colors: {
-    mainBackground: '#faf2e7',
-    primaryBackground: '#d2d4d2',
-    secondaryBackground: '#abdea9',
-    terciaryBackground: '#f7f0e6',
-    mainText: 'black',
-    primaryText: 'grey'
+    mainBackground: '#A6E3E9',
+    primaryBackground: '#71C9CE',
+    secondaryBackground: '#E3FDFD',
+    terciaryBackground: '#A6E3E9',
+    mainText: '#222831',
+    primaryText: '#393E46'
   }
 }

@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 15,
     borderRadius: 10,
-    backgroundColor: '#faf2e7'
+    backgroundColor: '#F6F6F6'
   },
   textTheme: {
     fontWeight: 'bold',

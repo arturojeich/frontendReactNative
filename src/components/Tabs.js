@@ -31,7 +31,7 @@ const Tabs = ({ listTabs }) => {
       screenOptions={{
         tabBarActiveTintColor: style.colors.mainText,
         tabBarInactiveTintColor: style.colors.primaryText,
-        tabBarActiveBackgroundColor: style.colors.primaryBackground,
+        tabBarActiveBackgroundColor: style.colors.secondaryBackground,
         tabBarStyle: {
           backgroundColor: style.colors.terciaryBackground
         },
