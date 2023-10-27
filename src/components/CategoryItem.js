@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    marginTop: 15,
+    marginTop: 10,
+    marginBottom: 10,
     borderRadius: 10,
     paddingRight: 10,
     backgroundColor: CustomStyles.colors.mainCard

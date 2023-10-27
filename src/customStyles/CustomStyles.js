@@ -7,5 +7,55 @@ export const CustomStyles = {
     mainCard: '#F6F6F6',
     mainText: '#222831',
     primaryText: '#393E46'
+  },
+  contentContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    height: '100%'
+  },
+  inputContainer: {
+    width: '100%'
+  },
+  label: {
+    alignSelf: 'center',
+    borderStyle: 'solid',
+    fontSize: 24
+  },
+  textInput: {
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    borderTopWidth: 0,
+    borderBottomWidth: 2,
+    borderColor: '#A6E3E9',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginVertical: 20,
+    fontSize: 24,
+    width: '100%'
+  },
+  buttons: {
+    width: '100%',
+    marginTop: 40
+  },
+  buttonText: {
+    color: 'black',
+    fontSize: 28
+  },
+  createButton: {
+    height: 60,
+    width: '100%',
+    backgroundColor: '#A6E3E9',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8
+  },
+  createButtonText: {
+    color: 'black',
+    fontSize: 28
   }
 }

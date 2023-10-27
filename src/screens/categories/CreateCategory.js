@@ -1,43 +1,41 @@
 import React, { useState } from 'react'
-import {
-  View,
-  StyleSheet,
-  Text,
-  TextInput,
-  ScrollView,
-  Button
-} from 'react-native'
-
+import { View, Text, TextInput, ScrollView, Button } from 'react-native'
+import { ref, push } from 'firebase/database'
 import { CustomStyles } from '../../customStyles/CustomStyles'
-import { post } from '../../services/ServiceCategories'
 
-const CreateCategory = () => {
-  //const [inputText, setInputText] = useState('')
+const CreateCategory = ({ db }) => {
   let inputText = ''
 
   handleInputText = (text) => {
     inputText = text
   }
+
+  function postCategory(newCategory) {
+    newCategory.descripcion !== ''
+      ? push(ref(db, '/administracion/categorias'), newCategory)
+      : console.log('No se pudo crear nueva categoria!')
+  }
+
   return (
-    <ScrollView contentContainerStyle={styles.contentContainer}>
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Descripción de Categoría</Text>
+    <ScrollView contentContainerStyle={CustomStyles.contentContainer}>
+      <View style={CustomStyles.inputContainer}>
+        <Text style={CustomStyles.label}>Descripción de Categoría</Text>
         <TextInput
           ref={(input) => {
             this.textInput = input
           }}
-          style={styles.textInput}
+          style={CustomStyles.textInput}
           placeholder="Por ejemplo, 'Oftalmología'"
           onChangeText={(x) => handleInputText(x)}
           defaultValue={inputText}
         />
       </View>
-      <View style={styles.buttons}>
+      <View style={CustomStyles.buttons}>
         <View>
           <Button
             title="Guardar"
             onPress={() => {
-              post({ descripcion: inputText })
+              postCategory({ descripcion: inputText })
             }}
             color={CustomStyles.colors.mainBackground}
           />
@@ -56,41 +54,5 @@ const CreateCategory = () => {
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({
-  contentContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    height: '100%'
-  },
-  container: {
-    flex: 1
-  },
-  inputContainer: {
-    width: '100%'
-  },
-  label: {
-    alignSelf: 'center',
-    borderStyle: 'solid',
-    fontSize: 24
-  },
-  textInput: {
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderTopWidth: 0,
-    borderBottomWidth: 2,
-    borderColor: CustomStyles.colors.mainBackground,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginVertical: 20,
-    fontSize: 24,
-    width: '100%'
-  },
-  buttons: {
-    marginTop: 40,
-    width: '100%'
-  }
-})
 
 export default CreateCategory

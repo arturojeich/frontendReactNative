@@ -17,14 +17,14 @@ import {
 } from 'react-native'
 import CategoryItem from '../components/CategoryItem'
 
-var post = null
+var db = null
 
 const ServiceCategories = () => {
   const [doneState, setDone] = useState(false)
   const [categoriesList, setCategories] = useState({})
   const categoriesKeys = Object.keys(categoriesList)
 
-  const db = getDatabase(app)
+  db = getDatabase(app)
   useEffect(() => {
     return onValue(ref(db, '/administracion/categorias'), (querySnapShot) => {
       let data = querySnapShot.val() || {}
@@ -65,20 +65,18 @@ const ServiceCategories = () => {
     push(ref(db, '/administracion/categorias'), newCategory)
   }
 
-  post = postCategory
-
   function deleteCategory(key) {
     console.log('Delete Category, with KEY: ' + key)
     console.log(categoriesList[key])
     remove(ref(db, `/administracion/categorias/${key}`))
   }
 
-  function putCategory() {
-    console.log('Update Category')
+  function putCategory({ id, descripcion }) {
+    console.log('Update Category, with description: ' + descripcion)
+    console.log('Update Category, with id: ' + id)
   }
 
   return getAllCategories()
 }
 
 export default ServiceCategories
-export { post }

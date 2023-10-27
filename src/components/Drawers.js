@@ -20,8 +20,7 @@ const Drawers = () => {
           backgroundColor: style.colors.mainBackground
         },
         headerTitleStyle: {
-          fontWeight: 'bold',
-          fontSize: 20,
+          fontSize: 26,
           color: 'black'
         },
         drawerStyle: {
