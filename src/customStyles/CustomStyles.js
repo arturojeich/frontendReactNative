@@ -32,11 +32,11 @@ export const CustomStyles = {
     paddingHorizontal: 10,
     marginVertical: 20,
     fontSize: 24,
-    width: '100%'
+    width: '100%',
+    marginBottom: 50
   },
   buttons: {
-    width: '100%',
-    marginTop: 40
+    width: '100%'
   },
   buttonText: {
     color: 'black',

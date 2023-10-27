@@ -9,11 +9,12 @@ const CategoryItem = ({
   id,
   deleteFunction,
   putFunction,
-  getFunction
+  getFunction,
+  navigation
 }) => {
   const { container, textTheme, buttons, shadowProp, data, elevation } = styles
   return (
-    <View style={[container, shadowProp, elevation]}>
+    <View key={id} style={[container, shadowProp, elevation]}>
       <View style={[data]}>
         <Text style={[textTheme]}>{descripcion}</Text>
       </View>
@@ -24,7 +25,12 @@ const CategoryItem = ({
           color="black"
           style={{ marginRight: 0, marginLeft: 0 }}
           backgroundColor={CustomStyles.colors.mainCard}
-          onPress={() => confirm('Editar', `${descripcion}?`)}
+          onPress={() => {
+            navigation.navigate('Editar Categoría', {
+              id: id,
+              oldDescripcion: descripcion
+            })
+          }}
         />
         <MaterialIcons.Button
           name="delete"

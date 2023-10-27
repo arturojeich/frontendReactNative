@@ -21,6 +21,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { CustomStyles } from '../../customStyles/CustomStyles'
 import CreateCategory from './CreateCategory'
 import { createStackNavigator } from '@react-navigation/stack'
+import EditCategory from './EditCategory'
 
 var db = null
 
@@ -48,8 +49,8 @@ const ListCategories = ({ navigation }) => {
                 data={categoriesList[key]}
                 id={key}
                 deleteFunction={deleteCategory}
-                putFunction={putCategory}
                 getFunction={getCategory}
+                navigation={navigation}
               />
             ))
           ) : (
@@ -79,11 +80,6 @@ const ListCategories = ({ navigation }) => {
     console.log('Delete Category, with KEY: ' + key)
     console.log(categoriesList[key])
     remove(ref(db, `/administracion/categorias/${key}`))
-  }
-
-  function putCategory({ id, descripcion }) {
-    console.log('Update Category, with description: ' + descripcion)
-    console.log('Update Category, with id: ' + id)
   }
 
   return (
@@ -132,6 +128,16 @@ function MyStack() {
         }}
       >
         {(props) => <CreateCategory {...props} db={db} />}
+      </Stack.Screen>
+      <Stack.Screen
+        name="Editar Categoría"
+        options={{
+          headerTintColor: CustomStyles.colors.mainText,
+          headerStyle: { backgroundColor: 'white' },
+          headerTitleAlign: 'center'
+        }}
+      >
+        {(props) => <EditCategory {...props} db={db} />}
       </Stack.Screen>
     </Stack.Navigator>
   )
