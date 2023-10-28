@@ -15,4 +15,12 @@ const confirm = (title, message, action, key) => {
   ])
 }
 
-export { confirm }
+const error = (title, message) => {
+  Alert.alert(title, message, [
+    {
+      text: 'OK'
+    }
+  ])
+}
+
+export { confirm, error }

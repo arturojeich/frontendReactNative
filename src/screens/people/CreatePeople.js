@@ -2,15 +2,25 @@ import React, { useState } from 'react'
 import { View, Text, TextInput, ScrollView, Button, Switch } from 'react-native'
 import { ref, push } from 'firebase/database'
 import { CustomStyles } from '../../customStyles/CustomStyles'
+import { confirm, error } from '../../components/Alerts'
 
-const CreatePeople = ({ route, navigation }) => {
-  //const { db } = route.params
+const CreatePeople = ({ route, navigation, db }) => {
   const [isEnabled, setIsEnabled] = useState(false)
+  const [newPerson, setNewPerson] = useState({ es_doctor: false })
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState)
   let inputText = ''
 
   handleInputText = (text) => {
     inputText = text
+  }
+
+  inputTextClear = () => {
+    this.textInput1.clear()
+    this.textInput2.clear()
+    this.textInput3.clear()
+    this.textInput4.clear()
+    this.textInput5.clear()
+    setIsEnabled(false)
   }
 
   validatePerson = (newPerson) => {
@@ -20,12 +30,15 @@ const CreatePeople = ({ route, navigation }) => {
         newPerson.apellido &&
         newPerson.cedula &&
         newPerson.telefono &&
-        newPerson.email &&
-        (newPerson.es_doctor || newPerson.es_doctor)
+        newPerson.email
       ) {
         return true
       }
     }
+    error(
+      'No se pudo registrar la persona',
+      'Todos los campos deben completarse!'
+    )
     return false
   }
 
@@ -33,6 +46,9 @@ const CreatePeople = ({ route, navigation }) => {
     validatePerson(newPerson)
       ? push(ref(db, '/administracion/personas/'), newPerson)
       : console.log('No se pudo agregar una nueva Persona!')
+    console.log('La persona a guardar es: ' + JSON.stringify(newPerson))
+    setNewPerson({ es_doctor: false })
+    inputTextClear()
   }
 
   return (
@@ -41,60 +57,60 @@ const CreatePeople = ({ route, navigation }) => {
         <Text style={CustomStyles.label}>Nombres</Text>
         <TextInput
           ref={(input) => {
-            this.textInput = input
+            this.textInput1 = input
           }}
           style={CustomStyles.textInput}
-          placeholder="Por ejemplo, 'Juan Luis'"
-          onChangeText={(x) => handleInputText(x)}
-          defaultValue={inputText}
+          placeholder="Ej. 'Juan Luis'"
+          onChangeText={(x) => setNewPerson({ ...newPerson, nombre: x })}
+          defaultValue={''}
         />
       </View>
       <View style={CustomStyles.inputContainer}>
         <Text style={CustomStyles.label}>Apellidos</Text>
         <TextInput
           ref={(input) => {
-            this.textInput = input
+            this.textInput2 = input
           }}
           style={CustomStyles.textInput}
-          placeholder="Por ejemplo, 'Perez Alves'"
-          onChangeText={(x) => handleInputText(x)}
-          defaultValue={inputText}
+          placeholder="Ej. 'Perez Alves'"
+          onChangeText={(x) => setNewPerson({ ...newPerson, apellido: x })}
+          defaultValue={''}
         />
       </View>
       <View style={CustomStyles.inputContainer}>
         <Text style={CustomStyles.label}>Teléfono</Text>
         <TextInput
           ref={(input) => {
-            this.textInput = input
+            this.textInput3 = input
           }}
           style={CustomStyles.textInput}
-          placeholder="Por ejemplo, '555-555-555'"
-          onChangeText={(x) => handleInputText(x)}
-          defaultValue={inputText}
+          placeholder="Ej. '555-555-555'"
+          onChangeText={(x) => setNewPerson({ ...newPerson, telefono: x })}
+          defaultValue={''}
         />
       </View>
       <View style={CustomStyles.inputContainer}>
         <Text style={CustomStyles.label}>Email</Text>
         <TextInput
           ref={(input) => {
-            this.textInput = input
+            this.textInput4 = input
           }}
           style={CustomStyles.textInput}
-          placeholder="Por ejemplo, 'ejemplo@mail.com'"
-          onChangeText={(x) => handleInputText(x)}
-          defaultValue={inputText}
+          placeholder="Ej. 'ejemplo@mail.com'"
+          onChangeText={(x) => setNewPerson({ ...newPerson, email: x })}
+          defaultValue={''}
         />
       </View>
       <View style={CustomStyles.inputContainer}>
         <Text style={CustomStyles.label}>Cédula</Text>
         <TextInput
           ref={(input) => {
-            this.textInput = input
+            this.textInput5 = input
           }}
           style={CustomStyles.textInput}
-          placeholder="Por ejemplo, '1234567'"
-          onChangeText={(x) => handleInputText(x)}
-          defaultValue={inputText}
+          placeholder="Ej. '1234567'"
+          onChangeText={(x) => setNewPerson({ ...newPerson, cedula: x })}
+          defaultValue={''}
         />
       </View>
       <View
@@ -115,7 +131,11 @@ const CreatePeople = ({ route, navigation }) => {
           }
           style={{ transform: [{ scaleX: 1.8 }, { scaleY: 1.8 }] }}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
+          onValueChange={(x) => {
+            toggleSwitch(),
+              console.log('El valor del toggle switch es: ' + x),
+              setNewPerson({ ...newPerson, es_doctor: x })
+          }}
           value={isEnabled}
         />
       </View>
@@ -124,7 +144,7 @@ const CreatePeople = ({ route, navigation }) => {
           <Button
             title="Guardar"
             onPress={() => {
-              postPeople({ descripcion: inputText })
+              postPeople(newPerson)
             }}
             color={CustomStyles.colors.mainBackground}
           />
@@ -133,8 +153,8 @@ const CreatePeople = ({ route, navigation }) => {
           <Button
             title="Cancelar"
             onPress={() => {
-              handleInputText('')
-              this.textInput.clear()
+              setNewPerson({ es_doctor: false })
+              inputTextClear()
             }}
             color="grey"
           />

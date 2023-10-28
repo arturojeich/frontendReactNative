@@ -65,11 +65,7 @@ const ListPeople = ({ navigation }) => {
     return (
       <TouchableOpacity
         style={CustomStyles.createButton}
-        onPress={() =>
-          navigation.navigate('Agregar Persona', {
-            db: null
-          })
-        }
+        onPress={() => navigation.navigate('Agregar Persona')}
       >
         <Text style={CustomStyles.createButtonText}>Nueva Persona</Text>
       </TouchableOpacity>
@@ -127,12 +123,13 @@ function MyStack() {
       />
       <Stack.Screen
         name="Agregar Persona"
-        component={CreatePeople}
         options={{
           headerStyleInterpolator: forFade,
           headerTitleAlign: 'center'
         }}
-      />
+      >
+        {(props) => <CreatePeople {...props} db={db} />}
+      </Stack.Screen>
       {/* <Stack.Screen
         name="Editar Persona"
         options={{
