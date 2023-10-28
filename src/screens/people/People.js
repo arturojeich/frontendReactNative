@@ -65,7 +65,11 @@ const ListPeople = ({ navigation }) => {
     return (
       <TouchableOpacity
         style={CustomStyles.createButton}
-        onPress={() => navigation.navigate('Agregar Persona')}
+        onPress={() =>
+          navigation.navigate('Agregar Persona', {
+            db: null
+          })
+        }
       >
         <Text style={CustomStyles.createButtonText}>Nueva Persona</Text>
       </TouchableOpacity>
@@ -88,20 +92,6 @@ const ListPeople = ({ navigation }) => {
       <FooterButtons />
     </SafeAreaView>
   )
-
-  // const listTabs = [
-  //   {
-  //     key: 'List People'
-  //   },
-  //   {
-  //     key: 'Create People'
-  //   }
-  // ]
-  // return (
-  //   <NavigationContainer independent={true}>
-  //     <Tabs listTabs={listTabs} />
-  //   </NavigationContainer>
-  // )
 }
 
 const forFade = ({ current, next }) => {
@@ -137,13 +127,12 @@ function MyStack() {
       />
       <Stack.Screen
         name="Agregar Persona"
+        component={CreatePeople}
         options={{
           headerStyleInterpolator: forFade,
           headerTitleAlign: 'center'
         }}
-      >
-        {(props) => <CreatePeople {...props} db={db} />}
-      </Stack.Screen>
+      />
       {/* <Stack.Screen
         name="Editar Persona"
         options={{
