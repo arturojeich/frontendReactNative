@@ -6,7 +6,8 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Switch
 } from 'react-native'
 import { app } from '../../../firebaseConfig'
 import {
@@ -27,7 +28,15 @@ var db = null
 
 const ListPeople = ({ navigation }) => {
   const [peopleList, setPeopleList] = useState({})
+  const [isEnabledDoctors, setIsEnabledDoctors] = useState(true)
+  const [isEnabledPatients, setIsEnabledPatients] = useState(true)
+  const toggleSwitchDoctors = () =>
+    setIsEnabledDoctors((previousState) => !previousState)
+  const toggleSwitchPatients = () =>
+    setIsEnabledPatients((previousState) => !previousState)
+
   const peopleKeys = Object.keys(peopleList)
+  console.log('People list: ' + JSON.stringify(peopleList))
 
   db = getDatabase(app)
   useEffect(() => {
@@ -43,21 +52,120 @@ const ListPeople = ({ navigation }) => {
       <ScrollView>
         <View>
           {peopleKeys.length > 0 ? (
-            peopleKeys.map((key) => (
-              <PeopleItem
-                key={key}
-                peopleData={peopleList[key]}
-                id={key}
-                deleteFunction={deletePeople}
-                getFunction={getPeople}
-                navigation={navigation}
-              />
-            ))
+            <>
+              {peopleKeys.map((key) => {
+                if (
+                  (peopleList[key].es_doctor == true &&
+                    isEnabledDoctors == true) ||
+                  (peopleList[key].es_doctor == false &&
+                    isEnabledPatients == true)
+                ) {
+                  return (
+                    <PeopleItem
+                      key={key}
+                      peopleData={peopleList[key]}
+                      id={key}
+                      deleteFunction={deletePeople}
+                      getFunction={getPeople}
+                      navigation={navigation}
+                    />
+                  )
+                } else {
+                  return null
+                }
+              })}
+            </>
           ) : (
             <ActivityIndicator size={'large'} color={`black`} />
           )}
         </View>
       </ScrollView>
+    )
+  }
+
+  function GetAllDoctors() {
+    return (
+      <ScrollView>
+        <View>
+          {peopleKeys.length > 0 ? (
+            <>
+              {peopleKeys.map((key) => {
+                if (peopleList[key].es_doctor == true) {
+                  return (
+                    <PeopleItem
+                      key={key}
+                      peopleData={peopleList[key]}
+                      id={key}
+                      deleteFunction={deletePeople}
+                      getFunction={getPeople}
+                      navigation={navigation}
+                    />
+                  )
+                } else {
+                  return null
+                }
+              })}
+            </>
+          ) : (
+            <ActivityIndicator size={'large'} color={`black`} />
+          )}
+        </View>
+      </ScrollView>
+    )
+  }
+
+  function HeaderButtons() {
+    return (
+      <View
+        style={{ borderColor: 'red', borderWidth: 1, flexDirection: 'row' }}
+      >
+        <View
+          style={[
+            CustomStyles.inputContainer,
+            {
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              width: '50%'
+            }
+          ]}
+        >
+          <Text style={[CustomStyles.label, { fontSize: 20, color: 'grey' }]}>
+            Doctores
+          </Text>
+          <Switch
+            trackColor={{ false: '#767577', true: '#767577' }}
+            thumbColor={'white'}
+            style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitchDoctors}
+            value={isEnabledDoctors}
+          />
+        </View>
+        <View
+          style={[
+            CustomStyles.inputContainer,
+            {
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+              width: '50%'
+            }
+          ]}
+        >
+          <Text style={[CustomStyles.label, { fontSize: 20, color: 'grey' }]}>
+            Pacientes
+          </Text>
+          <Switch
+            trackColor={{ false: '#767577', true: '#767577' }}
+            thumbColor={'white'}
+            style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitchPatients}
+            value={isEnabledPatients}
+          />
+        </View>
+      </View>
     )
   }
 
@@ -84,6 +192,7 @@ const ListPeople = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <HeaderButtons />
       <GetAllPeople />
       <FooterButtons />
     </SafeAreaView>
