@@ -83,37 +83,6 @@ const ListPeople = ({ navigation }) => {
     )
   }
 
-  function GetAllDoctors() {
-    return (
-      <ScrollView>
-        <View>
-          {peopleKeys.length > 0 ? (
-            <>
-              {peopleKeys.map((key) => {
-                if (peopleList[key].es_doctor == true) {
-                  return (
-                    <PeopleItem
-                      key={key}
-                      peopleData={peopleList[key]}
-                      id={key}
-                      deleteFunction={deletePeople}
-                      getFunction={getPeople}
-                      navigation={navigation}
-                    />
-                  )
-                } else {
-                  return null
-                }
-              })}
-            </>
-          ) : (
-            <ActivityIndicator size={'large'} color={`black`} />
-          )}
-        </View>
-      </ScrollView>
-    )
-  }
-
   function HeaderButtons() {
     return (
       <View
