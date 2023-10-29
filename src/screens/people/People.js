@@ -23,6 +23,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import CreatePeople from './CreatePeople'
 import PeopleItem from '../../components/PeopleItem'
 import { CustomStyles } from '../../customStyles/CustomStyles'
+import EditPeople from './EditPeople'
 
 var db = null
 
@@ -36,7 +37,6 @@ const ListPeople = ({ navigation }) => {
     setIsEnabledPatients((previousState) => !previousState)
 
   const peopleKeys = Object.keys(peopleList)
-  console.log('People list: ' + JSON.stringify(peopleList))
 
   db = getDatabase(app)
   useEffect(() => {
@@ -85,9 +85,7 @@ const ListPeople = ({ navigation }) => {
 
   function HeaderButtons() {
     return (
-      <View
-        style={{ borderColor: 'red', borderWidth: 1, flexDirection: 'row' }}
-      >
+      <View style={{ flexDirection: 'row' }}>
         <View
           style={[
             CustomStyles.inputContainer,
@@ -208,7 +206,7 @@ function MyStack() {
       >
         {(props) => <CreatePeople {...props} db={db} />}
       </Stack.Screen>
-      {/* <Stack.Screen
+      <Stack.Screen
         name="Editar Persona"
         options={{
           headerTintColor: CustomStyles.colors.mainText,
@@ -217,7 +215,7 @@ function MyStack() {
         }}
       >
         {(props) => <EditPeople {...props} db={db} />}
-      </Stack.Screen> */}
+      </Stack.Screen>
     </Stack.Navigator>
   )
 }
@@ -230,15 +228,4 @@ const People = () => {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  text: {
-    color: 'red',
-    fontSize: 40
-  }
-})
 export default People
