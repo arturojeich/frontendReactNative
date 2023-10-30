@@ -22,6 +22,7 @@ import { CustomStyles } from '../../customStyles/CustomStyles'
 import CreateCategory from './CreateCategory'
 import { createStackNavigator } from '@react-navigation/stack'
 import EditCategory from './EditCategory'
+import { MaterialIcons } from '@expo/vector-icons'
 
 var db = null
 
@@ -57,6 +58,7 @@ const ListCategories = ({ navigation }) => {
             <ActivityIndicator size={'large'} color={`black`} />
           )}
         </View>
+        <View style={{ height: 90 }} />
       </ScrollView>
     )
   }
@@ -67,7 +69,7 @@ const ListCategories = ({ navigation }) => {
         style={CustomStyles.createButton}
         onPress={() => navigation.navigate('Agregar Categoría')}
       >
-        <Text style={CustomStyles.createButtonText}>Nueva Categoría</Text>
+        <MaterialIcons name="add" size={60} color="white" />
       </TouchableOpacity>
     )
   }

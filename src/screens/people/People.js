@@ -25,6 +25,7 @@ import PeopleItem from '../../components/PeopleItem'
 import { CustomStyles } from '../../customStyles/CustomStyles'
 import EditPeople from './EditPeople'
 import SearchBar from '../../components/SearchBar'
+import { MaterialIcons } from '@expo/vector-icons'
 
 var db = null
 
@@ -52,12 +53,6 @@ const ListPeople = ({ navigation }) => {
   }, [])
 
   function searchText(text) {
-    console.log('Text to search into: ' + text.toLowerCase())
-    console.log('Text to search: ' + searchPhrase.toLowerCase())
-    console.log(
-      'Boolean: ' + text.toLowerCase().includes(searchPhrase.toLowerCase())
-    )
-    console.log('------------------------------------')
     return text.toLowerCase().includes(searchPhrase.toLowerCase())
   }
 
@@ -175,7 +170,7 @@ const ListPeople = ({ navigation }) => {
         style={CustomStyles.createButton}
         onPress={() => navigation.navigate('Agregar Persona')}
       >
-        <Text style={CustomStyles.createButtonText}>Nueva Persona</Text>
+        <MaterialIcons name="add" size={60} color="white" />
       </TouchableOpacity>
     )
   }

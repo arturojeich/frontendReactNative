@@ -44,15 +44,14 @@ export const CustomStyles = {
   },
   createButton: {
     height: 60,
-    width: '100%',
+    width: 60,
     backgroundColor: '#A6E3E9',
-    flexDirection: 'row',
+    position: 'absolute',
+    right: 30,
+    bottom: 30,
+    borderRadius: 30,
     alignItems: 'center',
-    justifyContent: 'center',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-    borderBottomLeftRadius: 8,
-    borderBottomRightRadius: 8
+    justifyContent: 'center'
   },
   createButtonText: {
     color: 'black',
