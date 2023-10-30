@@ -31,7 +31,7 @@ var db = null
 const ListPeople = ({ navigation }) => {
   const [searchPhrase, setSearchPhrase] = useState('')
   const [clicked, setClicked] = useState(false)
-  const [search, setSearch] = useState(false)
+  const [searchFlag, setSearchFlag] = useState(false)
   const [peopleList, setPeopleList] = useState({})
   const [isEnabledDoctors, setIsEnabledDoctors] = useState(true)
   const [isEnabledPatients, setIsEnabledPatients] = useState(true)
@@ -51,13 +51,14 @@ const ListPeople = ({ navigation }) => {
     })
   }, [])
 
-  // True -> Search, False -> Dont search
-  function submitingText(value) {
-    setSearch(value)
-  }
-
   function searchText(text) {
-    return text.includes(searchPhrase)
+    console.log('Text to search into: ' + text.toLowerCase())
+    console.log('Text to search: ' + searchPhrase.toLowerCase())
+    console.log(
+      'Boolean: ' + text.toLowerCase().includes(searchPhrase.toLowerCase())
+    )
+    console.log('------------------------------------')
+    return text.toLowerCase().includes(searchPhrase.toLowerCase())
   }
 
   function GetAllPeople() {
@@ -68,15 +69,17 @@ const ListPeople = ({ navigation }) => {
             <>
               {peopleKeys.map((key) => {
                 if (
-                  (peopleList[key].es_doctor == true &&
+                  ((peopleList[key].es_doctor == true &&
                     isEnabledDoctors == true) ||
-                  (peopleList[key].es_doctor == false &&
-                    isEnabledPatients == true &&
-                    (!search ||
-                      (search &&
-                        searchText(
-                          `${peopleList[key].nombre} ${peopleList[key].apellido}`
-                        ))))
+                    (peopleList[key].es_doctor == false &&
+                      isEnabledPatients == true)) &&
+                  (!searchFlag ||
+                    (searchFlag &&
+                      searchText(
+                        `${peopleList[key].nombre.toLowerCase()} ${peopleList[
+                          key
+                        ].apellido.toLowerCase()}`
+                      )))
                 ) {
                   return (
                     <PeopleItem
@@ -106,11 +109,12 @@ const ListPeople = ({ navigation }) => {
       <View>
         <View>
           <SearchBar
+            searchFlag={searchFlag}
             searchPhrase={searchPhrase}
-            setSearchPhrase={setSearchPhrase}
             clicked={clicked}
+            setSearchFlag={setSearchFlag}
+            setSearchPhrase={setSearchPhrase}
             setClicked={setClicked}
-            submitingText={submitingText}
           />
         </View>
         <View style={{ flexDirection: 'row' }}>

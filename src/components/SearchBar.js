@@ -3,12 +3,18 @@ import { StyleSheet, TextInput, View, Keyboard, Button } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 
 const SearchBar = ({
-  clicked,
+  searchFlag,
   searchPhrase,
+  clicked,
+  setSearchFlag,
   setSearchPhrase,
-  setClicked,
-  submitingText
+  setClicked
 }) => {
+  let inputText = ''
+  handlingInput = (text) => {
+    inputText = text
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.searchBar}>
@@ -22,17 +28,18 @@ const SearchBar = ({
         <TextInput
           style={styles.input}
           placeholder="Search"
-          value={searchPhrase}
-          onChangeText={setSearchPhrase}
+          defaultValue={searchPhrase}
+          onChangeText={(x) => handlingInput(x)}
           onSubmitEditing={() => {
-            setSearchPhrase(searchPhrase), () => submitingText()
+            console.log('On submit editing: ' + inputText)
+            setSearchPhrase(inputText), setSearchFlag(true)
           }}
           onFocus={() => {
-            setClicked(true)
+            //            setClicked(true)
           }}
         />
 
-        {clicked && (
+        {
           <MaterialIcons
             name="close"
             size={26}
@@ -40,22 +47,25 @@ const SearchBar = ({
             style={{ marginLeft: -25 }}
             onPress={() => {
               setSearchPhrase('')
-              setClicked(false)
+              handlingInput('')
+              //setClicked(false)
+              setSearchFlag(false)
             }}
           />
-        )}
+        }
       </View>
-      {clicked && (
+      {
         <MaterialIcons
           name="check"
           size={26}
           color="green"
           style={{ marginLeft: 10 }}
           onPress={() => {
-            setSearchPhrase(''), setClicked(false), () => submitingText()
+            //setClicked(false),
+            setSearchFlag(true)
           }}
         />
-      )}
+      }
     </View>
   )
 }
