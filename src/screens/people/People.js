@@ -24,10 +24,14 @@ import CreatePeople from './CreatePeople'
 import PeopleItem from '../../components/PeopleItem'
 import { CustomStyles } from '../../customStyles/CustomStyles'
 import EditPeople from './EditPeople'
+import SearchBar from '../../components/SearchBar'
 
 var db = null
 
 const ListPeople = ({ navigation }) => {
+  const [searchPhrase, setSearchPhrase] = useState('')
+  const [clicked, setClicked] = useState(false)
+  const [search, setSearch] = useState(false)
   const [peopleList, setPeopleList] = useState({})
   const [isEnabledDoctors, setIsEnabledDoctors] = useState(true)
   const [isEnabledPatients, setIsEnabledPatients] = useState(true)
@@ -47,6 +51,15 @@ const ListPeople = ({ navigation }) => {
     })
   }, [])
 
+  // True -> Search, False -> Dont search
+  function submitingText(value) {
+    setSearch(value)
+  }
+
+  function searchText(text) {
+    return text.includes(searchPhrase)
+  }
+
   function GetAllPeople() {
     return (
       <ScrollView>
@@ -58,7 +71,12 @@ const ListPeople = ({ navigation }) => {
                   (peopleList[key].es_doctor == true &&
                     isEnabledDoctors == true) ||
                   (peopleList[key].es_doctor == false &&
-                    isEnabledPatients == true)
+                    isEnabledPatients == true &&
+                    (!search ||
+                      (search &&
+                        searchText(
+                          `${peopleList[key].nombre} ${peopleList[key].apellido}`
+                        ))))
                 ) {
                   return (
                     <PeopleItem
@@ -85,52 +103,63 @@ const ListPeople = ({ navigation }) => {
 
   function HeaderButtons() {
     return (
-      <View style={{ flexDirection: 'row' }}>
-        <View
-          style={[
-            CustomStyles.inputContainer,
-            {
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              width: '50%'
-            }
-          ]}
-        >
-          <Text style={[CustomStyles.label, { fontSize: 20, color: 'grey' }]}>
-            Doctores
-          </Text>
-          <Switch
-            trackColor={{ false: '#767577', true: '#767577' }}
-            thumbColor={'white'}
-            style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitchDoctors}
-            value={isEnabledDoctors}
+      <View>
+        <View>
+          <SearchBar
+            searchPhrase={searchPhrase}
+            setSearchPhrase={setSearchPhrase}
+            clicked={clicked}
+            setClicked={setClicked}
+            submitingText={submitingText}
           />
         </View>
-        <View
-          style={[
-            CustomStyles.inputContainer,
-            {
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-              width: '50%'
-            }
-          ]}
-        >
-          <Text style={[CustomStyles.label, { fontSize: 20, color: 'grey' }]}>
-            Pacientes
-          </Text>
-          <Switch
-            trackColor={{ false: '#767577', true: '#767577' }}
-            thumbColor={'white'}
-            style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
-            ios_backgroundColor="#3e3e3e"
-            onValueChange={toggleSwitchPatients}
-            value={isEnabledPatients}
-          />
+        <View style={{ flexDirection: 'row' }}>
+          <View
+            style={[
+              CustomStyles.inputContainer,
+              {
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                width: '50%'
+              }
+            ]}
+          >
+            <Text style={[CustomStyles.label, { fontSize: 20, color: 'grey' }]}>
+              Doctores
+            </Text>
+            <Switch
+              trackColor={{ false: '#767577', true: '#767577' }}
+              thumbColor={'white'}
+              style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitchDoctors}
+              value={isEnabledDoctors}
+            />
+          </View>
+          <View
+            style={[
+              CustomStyles.inputContainer,
+              {
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-evenly',
+                width: '50%'
+              }
+            ]}
+          >
+            <Text style={[CustomStyles.label, { fontSize: 20, color: 'grey' }]}>
+              Pacientes
+            </Text>
+            <Switch
+              trackColor={{ false: '#767577', true: '#767577' }}
+              thumbColor={'white'}
+              style={{ transform: [{ scaleX: 1.3 }, { scaleY: 1.3 }] }}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleSwitchPatients}
+              value={isEnabledPatients}
+            />
+          </View>
         </View>
       </View>
     )
