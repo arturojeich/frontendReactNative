@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, Text } from 'react-native'
 
-const CreateClinicalRecord = () => {
+const CreateClinicalRecord = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Create Record</Text>

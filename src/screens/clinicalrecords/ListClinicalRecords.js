@@ -1,24 +1,136 @@
-import React from 'react'
-import { Text, View, StyleSheet } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { ScrollView, View, ActivityIndicator, SafeAreaView } from 'react-native'
+import { app } from '../../../firebaseConfig'
+import { getDatabase, ref, onValue } from 'firebase/database'
+import ClinicalRecordItem from '../../components/ClinicalRecordItem'
+import FooterOptions from '../../components/FooterOptions'
+import HeaderOptions from '../../components/HeaderOptions'
 
-const ListClinicalRecords = () => {
+const ListClinicalRecords = ({ navigation }) => {
+  const [dbFirebase, setDBFirebase] = useState(getDatabase(app))
+  const [searchPhrase, setSearchPhrase] = useState('')
+  const [clicked, setClicked] = useState(false)
+  const [searchFlag, setSearchFlag] = useState(false)
+  const [clinicalRecordsList, setClinicalRecordsList] = useState({})
+  const [peopleList, setPeopleList] = useState({})
+  const [categoriesList, setCategoriesList] = useState({})
+  const [isEnabledDoctors, setIsEnabledDoctors] = useState(true)
+  const [isEnabledPatients, setIsEnabledPatients] = useState(true)
+  const clinicalRecordsKeys = Object.keys(clinicalRecordsList)
+  const peopleKeys = Object.keys(peopleList)
+  const categoriesKeys = Object.keys(categoriesList)
+
+  const toggleSwitchDoctors = () =>
+    setIsEnabledDoctors((previousState) => !previousState)
+  const toggleSwitchPatients = () =>
+    setIsEnabledPatients((previousState) => !previousState)
+
+  useEffect(() => {
+    return onValue(
+      ref(dbFirebase, '/administracion/fichas'),
+      (querySnapShot) => {
+        let data = querySnapShot.val() || {}
+        let itemList = { ...data }
+        setClinicalRecordsList(itemList)
+      }
+    )
+  }, [])
+
+  useEffect(() => {
+    return onValue(
+      ref(dbFirebase, '/administracion/personas'),
+      (querySnapShot) => {
+        let data = querySnapShot.val() || {}
+        let itemList = { ...data }
+        setPeopleList(itemList)
+      }
+    )
+  }, [])
+
+  useEffect(() => {
+    return onValue(
+      ref(dbFirebase, '/administracion/categorias'),
+      (querySnapShot) => {
+        let data = querySnapShot.val() || {}
+        let itemList = { ...data }
+        setCategoriesList(itemList)
+      }
+    )
+  }, [])
+
+  function searchText(text) {
+    return text.toLowerCase().includes(searchPhrase.toLowerCase())
+  }
+
+  function GetAllClinicalRecords() {
+    return (
+      <ScrollView>
+        <View>
+          {clinicalRecordsKeys.length > 0 ? (
+            <>
+              {clinicalRecordsKeys.map((key) => {
+                if (
+                  (((clinicalRecordsList[key].es_doctor == true &&
+                    isEnabledDoctors == true) ||
+                    (clinicalRecordsList[key].es_doctor == false &&
+                      isEnabledPatients == true)) &&
+                    (!searchFlag ||
+                      (searchFlag &&
+                        searchText(
+                          `${clinicalRecordsList[
+                            key
+                          ].nombre.toLowerCase()} ${clinicalRecordsList[
+                            key
+                          ].apellido.toLowerCase()}`
+                        )))) ||
+                  true
+                ) {
+                  return (
+                    <ClinicalRecordItem
+                      key={key}
+                      clinicalRecordData={clinicalRecordsList[key]}
+                      peopleData={peopleList}
+                      categoriesData={categoriesList}
+                      id={key}
+                      navigation={navigation}
+                      db={dbFirebase}
+                    />
+                  )
+                } else {
+                  return null
+                }
+              })}
+            </>
+          ) : (
+            <ActivityIndicator size={'large'} color={`black`} />
+          )}
+        </View>
+      </ScrollView>
+    )
+  }
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>List Records</Text>
-    </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <HeaderOptions
+        searchFlag={searchFlag}
+        searchPhrase={searchPhrase}
+        clicked={clicked}
+        isEnabledDoctors={isEnabledDoctors}
+        isEnabledPatients={isEnabledPatients}
+        setSearchFlag={setSearchFlag}
+        setSearchPhrase={setSearchPhrase}
+        setClicked={setClicked}
+        toggleSwitchDoctors={toggleSwitchDoctors}
+        toggleSwitchPatients={toggleSwitchPatients}
+      />
+      <GetAllClinicalRecords />
+      <FooterOptions
+        navigation={navigation}
+        db={dbFirebase}
+        screenTypeName={'Agregar Ficha'}
+      />
+    </SafeAreaView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  text: {
-    color: 'red',
-    fontSize: 40
-  }
-})
 
 export default ListClinicalRecords

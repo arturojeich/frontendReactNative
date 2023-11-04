@@ -1,10 +1,15 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
-import Tabs from '../../components/Tabs'
+import MyStack from '../../components/Stack'
+
+import { LogBox } from 'react-native'
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state'
+])
 
 const ClinicalRecords = () => {
-  const listTabs = [
+  const listScreens = [
     {
       key: 'List Clinical Records'
     },
@@ -12,25 +17,14 @@ const ClinicalRecords = () => {
       key: 'Create Clinical Record'
     },
     {
-      key: 'Export Clinical Records'
+      key: 'Edit Clinical Record'
     }
   ]
   return (
     <NavigationContainer independent={true}>
-      <Tabs listTabs={listTabs} />
+      <MyStack listScreens={listScreens} />
     </NavigationContainer>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  text: {
-    color: 'red',
-    fontSize: 40
-  }
-})
 export default ClinicalRecords
