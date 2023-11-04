@@ -14,16 +14,9 @@ const ListClinicalRecords = ({ navigation }) => {
   const [clinicalRecordsList, setClinicalRecordsList] = useState({})
   const [peopleList, setPeopleList] = useState({})
   const [categoriesList, setCategoriesList] = useState({})
-  const [isEnabledDoctors, setIsEnabledDoctors] = useState(true)
-  const [isEnabledPatients, setIsEnabledPatients] = useState(true)
   const clinicalRecordsKeys = Object.keys(clinicalRecordsList)
   const peopleKeys = Object.keys(peopleList)
   const categoriesKeys = Object.keys(categoriesList)
-
-  const toggleSwitchDoctors = () =>
-    setIsEnabledDoctors((previousState) => !previousState)
-  const toggleSwitchPatients = () =>
-    setIsEnabledPatients((previousState) => !previousState)
 
   useEffect(() => {
     return onValue(
@@ -66,24 +59,30 @@ const ListClinicalRecords = ({ navigation }) => {
     return (
       <ScrollView>
         <View>
-          {clinicalRecordsKeys.length > 0 ? (
+          {clinicalRecordsKeys.length > 0 &&
+          peopleKeys.length > 0 &&
+          categoriesKeys.length > 0 ? (
             <>
               {clinicalRecordsKeys.map((key) => {
                 if (
-                  (((clinicalRecordsList[key].es_doctor == true &&
-                    isEnabledDoctors == true) ||
-                    (clinicalRecordsList[key].es_doctor == false &&
-                      isEnabledPatients == true)) &&
-                    (!searchFlag ||
-                      (searchFlag &&
-                        searchText(
-                          `${clinicalRecordsList[
-                            key
-                          ].nombre.toLowerCase()} ${clinicalRecordsList[
-                            key
-                          ].apellido.toLowerCase()}`
-                        )))) ||
-                  true
+                  !searchFlag ||
+                  (searchFlag &&
+                    searchText(
+                      `${peopleList[clinicalRecordsList[key].doctor].nombre} ${
+                        peopleList[clinicalRecordsList[key].doctor].apellido
+                      }`
+                    )) ||
+                  searchText(
+                    `${peopleList[clinicalRecordsList[key].paciente].nombre} ${
+                      peopleList[clinicalRecordsList[key].paciente].apellido
+                    }`
+                  ) ||
+                  searchText(
+                    `${
+                      categoriesList[clinicalRecordsList[key].categoria]
+                        .descripcion
+                    }`
+                  )
                 ) {
                   return (
                     <ClinicalRecordItem
@@ -119,6 +118,7 @@ const ListClinicalRecords = ({ navigation }) => {
           setSearchFlag={setSearchFlag}
           setSearchPhrase={setSearchPhrase}
           setClicked={setClicked}
+          placeholder={'Dr., Paciente o Catg.'}
         />
       </View>
       <GetAllClinicalRecords />

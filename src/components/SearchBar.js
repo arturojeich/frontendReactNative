@@ -8,7 +8,8 @@ const SearchBar = ({
   clicked,
   setSearchFlag,
   setSearchPhrase,
-  setClicked
+  setClicked,
+  placeholder
 }) => {
   let inputText = ''
   handlingInput = (text) => {
@@ -27,7 +28,7 @@ const SearchBar = ({
 
         <TextInput
           style={styles.input}
-          placeholder="Search"
+          placeholder={placeholder}
           defaultValue={searchPhrase}
           onChangeText={(x) => handlingInput(x)}
           onSubmitEditing={() => {
