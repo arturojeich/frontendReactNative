@@ -4,7 +4,8 @@ import { app } from '../../../firebaseConfig'
 import { getDatabase, ref, onValue } from 'firebase/database'
 import PeopleItem from '../../components/PeopleItem'
 import FooterOptions from '../../components/FooterOptions'
-import HeaderOptions from '../../components/HeaderOptions'
+import FilterToggles from '../../components/FilterToggles'
+import SearchBar from '../../components/SearchBar'
 
 const ListPeople = ({ navigation }) => {
   const [dbFirebase, setDBFirebase] = useState(getDatabase(app))
@@ -80,18 +81,22 @@ const ListPeople = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <HeaderOptions
-        searchFlag={searchFlag}
-        searchPhrase={searchPhrase}
-        clicked={clicked}
-        isEnabledDoctors={isEnabledDoctors}
-        isEnabledPatients={isEnabledPatients}
-        setSearchFlag={setSearchFlag}
-        setSearchPhrase={setSearchPhrase}
-        setClicked={setClicked}
-        toggleSwitchDoctors={toggleSwitchDoctors}
-        toggleSwitchPatients={toggleSwitchPatients}
-      />
+      <View>
+        <SearchBar
+          searchFlag={searchFlag}
+          searchPhrase={searchPhrase}
+          clicked={clicked}
+          setSearchFlag={setSearchFlag}
+          setSearchPhrase={setSearchPhrase}
+          setClicked={setClicked}
+        />
+        <FilterToggles
+          isEnabledDoctors={isEnabledDoctors}
+          isEnabledPatients={isEnabledPatients}
+          toggleSwitchDoctors={toggleSwitchDoctors}
+          toggleSwitchPatients={toggleSwitchPatients}
+        />
+      </View>
       <GetAllPeople />
       <FooterOptions
         navigation={navigation}

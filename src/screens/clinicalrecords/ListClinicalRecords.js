@@ -4,7 +4,7 @@ import { app } from '../../../firebaseConfig'
 import { getDatabase, ref, onValue } from 'firebase/database'
 import ClinicalRecordItem from '../../components/ClinicalRecordItem'
 import FooterOptions from '../../components/FooterOptions'
-import HeaderOptions from '../../components/HeaderOptions'
+import SearchBar from '../../components/SearchBar'
 
 const ListClinicalRecords = ({ navigation }) => {
   const [dbFirebase, setDBFirebase] = useState(getDatabase(app))
@@ -111,18 +111,16 @@ const ListClinicalRecords = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <HeaderOptions
-        searchFlag={searchFlag}
-        searchPhrase={searchPhrase}
-        clicked={clicked}
-        isEnabledDoctors={isEnabledDoctors}
-        isEnabledPatients={isEnabledPatients}
-        setSearchFlag={setSearchFlag}
-        setSearchPhrase={setSearchPhrase}
-        setClicked={setClicked}
-        toggleSwitchDoctors={toggleSwitchDoctors}
-        toggleSwitchPatients={toggleSwitchPatients}
-      />
+      <View>
+        <SearchBar
+          searchFlag={searchFlag}
+          searchPhrase={searchPhrase}
+          clicked={clicked}
+          setSearchFlag={setSearchFlag}
+          setSearchPhrase={setSearchPhrase}
+          setClicked={setClicked}
+        />
+      </View>
       <GetAllClinicalRecords />
       <FooterOptions
         navigation={navigation}
