@@ -89,6 +89,7 @@ const ListPeople = ({ navigation }) => {
           setSearchFlag={setSearchFlag}
           setSearchPhrase={setSearchPhrase}
           setClicked={setClicked}
+          placeholder={'Nombre o Apellido'}
         />
         <FilterToggles
           isEnabledDoctors={isEnabledDoctors}
