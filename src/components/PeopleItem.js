@@ -4,15 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { CustomStyles } from '../customStyles/CustomStyles'
 import { confirm } from './Alerts'
 
-const PeopleItem = ({
-  peopleData,
-  id,
-  db,
-  deleteFunction,
-  putFunction,
-  getFunction,
-  navigation
-}) => {
+const PeopleItem = ({ peopleData, id, db, deleteFunction, navigation }) => {
   const {
     container,
     titleTheme,
