@@ -2,9 +2,10 @@ import React from 'react'
 import { View, Text, StyleSheet, Button } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { CustomStyles } from '../customStyles/CustomStyles'
+import { ref, remove } from 'firebase/database'
 import { confirm } from './Alerts'
 
-const PeopleItem = ({ peopleData, id, db, deleteFunction, navigation }) => {
+const PeopleItem = ({ peopleData, id, db, navigation }) => {
   const {
     container,
     titleTheme,
@@ -16,6 +17,12 @@ const PeopleItem = ({ peopleData, id, db, deleteFunction, navigation }) => {
     elevation
   } = styles
   const { nombre, apellido, telefono, cedula, email, es_doctor } = peopleData
+
+  function deletePeople(key) {
+    console.log('Delete people, with KEY: ' + key)
+    remove(ref(db, `/administracion/personas/${key}`))
+  }
+
   return (
     <View key={id} style={[container, shadowProp, elevation]}>
       <View style={[data]}>
@@ -69,7 +76,7 @@ const PeopleItem = ({ peopleData, id, db, deleteFunction, navigation }) => {
             confirm(
               'Eliminar',
               `Esta seguro de eliminar el registro de ${nombre} ${apellido}?`,
-              deleteFunction,
+              deletePeople,
               id
             )
           }

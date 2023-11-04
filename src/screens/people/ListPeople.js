@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { ScrollView, View, ActivityIndicator, SafeAreaView } from 'react-native'
 import { app } from '../../../firebaseConfig'
-import { getDatabase, ref, onValue, remove } from 'firebase/database'
+import { getDatabase, ref, onValue } from 'firebase/database'
 import PeopleItem from '../../components/PeopleItem'
 import FooterOptions from '../../components/FooterOptions'
 import HeaderOptions from '../../components/HeaderOptions'
@@ -61,7 +61,6 @@ const ListPeople = ({ navigation }) => {
                       key={key}
                       peopleData={peopleList[key]}
                       id={key}
-                      deleteFunction={deletePeople}
                       navigation={navigation}
                       db={dbFirebase}
                     />
@@ -77,12 +76,6 @@ const ListPeople = ({ navigation }) => {
         </View>
       </ScrollView>
     )
-  }
-
-  function deletePeople(key) {
-    console.log('Delete people, with KEY: ' + key)
-    console.log(peopleList[key])
-    remove(ref(dbFirebase, `/administracion/personas/${key}`))
   }
 
   return (
