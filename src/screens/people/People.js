@@ -26,10 +26,14 @@ import { CustomStyles } from '../../customStyles/CustomStyles'
 import EditPeople from './EditPeople'
 import SearchBar from '../../components/SearchBar'
 import { MaterialIcons } from '@expo/vector-icons'
+import { LogBox } from 'react-native'
 
-var db = null
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state'
+])
 
 const ListPeople = ({ navigation }) => {
+  const [dbFirebase, setDBFirebase] = useState(getDatabase(app))
   const [searchPhrase, setSearchPhrase] = useState('')
   const [clicked, setClicked] = useState(false)
   const [searchFlag, setSearchFlag] = useState(false)
@@ -43,13 +47,15 @@ const ListPeople = ({ navigation }) => {
 
   const peopleKeys = Object.keys(peopleList)
 
-  db = getDatabase(app)
   useEffect(() => {
-    return onValue(ref(db, '/administracion/personas'), (querySnapShot) => {
-      let data = querySnapShot.val() || {}
-      let itemList = { ...data }
-      setPeopleList(itemList)
-    })
+    return onValue(
+      ref(dbFirebase, '/administracion/personas'),
+      (querySnapShot) => {
+        let data = querySnapShot.val() || {}
+        let itemList = { ...data }
+        setPeopleList(itemList)
+      }
+    )
   }, [])
 
   function searchText(text) {
@@ -84,6 +90,7 @@ const ListPeople = ({ navigation }) => {
                       deleteFunction={deletePeople}
                       getFunction={getPeople}
                       navigation={navigation}
+                      db={dbFirebase}
                     />
                   )
                 } else {
@@ -168,7 +175,11 @@ const ListPeople = ({ navigation }) => {
     return (
       <TouchableOpacity
         style={CustomStyles.createButton}
-        onPress={() => navigation.navigate('Agregar Persona')}
+        onPress={() =>
+          navigation.navigate('Agregar Persona', {
+            db: dbFirebase
+          })
+        }
       >
         <MaterialIcons name="add" size={60} color="white" />
       </TouchableOpacity>
@@ -182,7 +193,7 @@ const ListPeople = ({ navigation }) => {
   function deletePeople(key) {
     console.log('Delete people, with KEY: ' + key)
     console.log(peopleList[key])
-    remove(ref(db, `/administracion/personas/${key}`))
+    remove(ref(dbFirebase, `/administracion/personas/${key}`))
   }
 
   return (
@@ -232,7 +243,7 @@ function MyStack() {
           headerTitleAlign: 'center'
         }}
       >
-        {(props) => <CreatePeople {...props} db={db} />}
+        {(props) => <CreatePeople {...props} />}
       </Stack.Screen>
       <Stack.Screen
         name="Editar Persona"
@@ -242,7 +253,7 @@ function MyStack() {
           headerTitleAlign: 'center'
         }}
       >
-        {(props) => <EditPeople {...props} db={db} />}
+        {(props) => <EditPeople {...props} />}
       </Stack.Screen>
     </Stack.Navigator>
   )

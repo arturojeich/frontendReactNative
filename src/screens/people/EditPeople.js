@@ -4,9 +4,10 @@ import { ref, push, update } from 'firebase/database'
 import { CustomStyles } from '../../customStyles/CustomStyles'
 import { confirm, error } from '../../components/Alerts'
 
-const EditPeople = ({ route, navigation, db }) => {
-  let {
+const EditPeople = ({ route, navigation }) => {
+  const {
     id,
+    db,
     peopleData: { nombre, apellido, cedula, telefono, email, es_doctor }
   } = route.params
   const [isEnabled, setIsEnabled] = useState(es_doctor)

@@ -4,7 +4,8 @@ import { ref, push } from 'firebase/database'
 import { CustomStyles } from '../../customStyles/CustomStyles'
 import { confirm, error } from '../../components/Alerts'
 
-const CreatePeople = ({ route, navigation, db }) => {
+const CreatePeople = ({ route, navigation }) => {
+  let { db } = route.params
   const [isEnabled, setIsEnabled] = useState(false)
   const [newPerson, setNewPerson] = useState({ es_doctor: false })
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState)

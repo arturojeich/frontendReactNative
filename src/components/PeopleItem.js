@@ -7,6 +7,7 @@ import { confirm } from './Alerts'
 const PeopleItem = ({
   peopleData,
   id,
+  db,
   deleteFunction,
   putFunction,
   getFunction,
@@ -62,6 +63,7 @@ const PeopleItem = ({
           onPress={() => {
             navigation.navigate('Editar Persona', {
               id: id,
+              db: db,
               peopleData: peopleData
             })
           }}
