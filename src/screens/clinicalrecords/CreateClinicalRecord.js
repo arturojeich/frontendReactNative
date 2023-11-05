@@ -4,7 +4,6 @@ import { ref, push } from 'firebase/database'
 import { CustomStyles } from '../../customStyles/CustomStyles'
 import { confirm, error } from '../../components/Alerts'
 import DropDownList from '../../components/DropDownList'
-import DateTimeItem from '../../components/DateTimeItem'
 
 const CreateClinicalRecord = ({ route, navigation }) => {
   let { db, extraData } = route.params
