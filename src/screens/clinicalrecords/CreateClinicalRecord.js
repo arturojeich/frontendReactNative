@@ -4,58 +4,65 @@ import { ref, push } from 'firebase/database'
 import { CustomStyles } from '../../customStyles/CustomStyles'
 import { confirm, error } from '../../components/Alerts'
 import DropDownList from '../../components/DropDownList'
+import DateTimeItem from '../../components/DateTimeItem'
 
 const CreateClinicalRecord = ({ route, navigation }) => {
   let { db, extraData } = route.params
   let { peopleList, categoriesList, peopleKeys, categoriesKeys } = extraData
-  const [isEnabled, setIsEnabled] = useState(false)
-  const [newRecord, setNewRecord] = useState({})
-  const [patient, setPatient] = useState({})
-  const [doctor, setDoctor] = useState({})
-  const [category, setCategory] = useState({})
-  const [horario, setHorario] = useState({})
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState)
+  const [patient, setPatient] = useState('')
+  const [doctor, setDoctor] = useState('')
+  const [category, setCategory] = useState('')
+  const [horario, setHorario] = useState('')
+  const [date, setDate] = useState(new Date())
+  const [motivo, setMotivo] = useState('')
+  const [diagnostico, setDiagnostico] = useState('')
+
   let inputText = ''
 
   handleInputText = (text) => {
     inputText = text
   }
 
-  inputTextClear = () => {
+  inputClear = () => {
     this.textInput1.clear()
     this.textInput2.clear()
-    this.textInput3.clear()
-    this.textInput4.clear()
-    this.textInput5.clear()
-    setIsEnabled(false)
+    setPatient('')
+    setDoctor('')
+    setCategory('')
+    setHorario('')
+    setDate(new Date())
+    setMotivo('')
+    setDiagnostico('')
   }
 
-  validatePerson = (newRecord) => {
+  const validateClinicalRecord = (newRecord) => {
     if (newRecord !== undefined && newRecord !== null) {
       if (
-        newRecord.nombre &&
-        newRecord.apellido &&
-        newRecord.cedula &&
-        newRecord.telefono &&
-        newRecord.email
+        newRecord.paciente &&
+        newRecord.doctor &&
+        newRecord.categoria &&
+        newRecord.fecha &&
+        newRecord.horaInicio &&
+        newRecord.horaFin &&
+        newRecord.motivo &&
+        newRecord.diagnostico
       ) {
         return true
       }
     }
     error(
-      'No se pudo registrar la persona',
+      'No se pudo registrar la ficha',
       'Todos los campos deben completarse!'
     )
     return false
   }
 
-  function postPeople(newRecord) {
-    validatePerson(newRecord)
+  function postClinicalRecord(newRecord) {
+    validateClinicalRecord(newRecord)
       ? push(ref(db, '/administracion/fichas/'), newRecord)
-      : console.log('No se pudo agregar una nueva Persona!')
-    console.log('La persona a guardar es: ' + JSON.stringify(newRecord))
-    setNewRecord({ es_doctor: false })
-    inputTextClear()
+      : console.log('No se pudo agregar una nueva Ficha!')
+    console.log('La ficha a guardar es: ' + JSON.stringify(newRecord))
+    inputClear()
   }
 
   // True -> Returns doctors array
@@ -152,67 +159,65 @@ const CreateClinicalRecord = ({ route, navigation }) => {
         />
       </View>
 
-      <View style={[CustomStyles.inputContainer, { marginTop: 20 }]}>
-        <Text style={CustomStyles.label}>Fecha</Text>
-      </View>
-
-      <View style={CustomStyles.inputContainer}>
-        <Text style={CustomStyles.label}>Motivo</Text>
-        <TextInput
-          ref={(input) => {
-            this.textInput5 = input
-          }}
-          style={CustomStyles.textInput}
-          placeholder="motivo"
-          onChangeText={(x) => setNewRecord({ ...newRecord, motivo: x })}
-          defaultValue={''}
-        />
-      </View>
-      <View style={CustomStyles.inputContainer}>
-        <Text style={CustomStyles.label}>Diagnostico</Text>
-        <TextInput
-          ref={(input) => {
-            this.textInput5 = input
-          }}
-          style={CustomStyles.textInput}
-          placeholder="diagnostico"
-          onChangeText={(x) => setNewRecord({ ...newRecord, diagnostico: x })}
-          defaultValue={''}
-        />
-      </View>
-
       <View
         style={[
           CustomStyles.inputContainer,
           {
+            marginTop: 40,
             flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-evenly'
+            justifyContent: 'space-evenly',
+            alignItems: 'center'
           }
         ]}
       >
-        <Text style={CustomStyles.label}>Es Doctor?</Text>
-        <Switch
-          trackColor={{ false: '#767577', true: '#81b0ff' }}
-          thumbColor={
-            isEnabled ? CustomStyles.colors.mainBackground : '#f4f3f4'
-          }
-          style={{ transform: [{ scaleX: 1.8 }, { scaleY: 1.8 }] }}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={(x) => {
-            toggleSwitch(),
-              console.log('El valor del toggle switch es: ' + x),
-              setNewRecord({ ...newRecord, es_doctor: x })
+        <Text style={CustomStyles.label}>Fecha:</Text>
+        <DateTimeItem date={date} setDate={setDate} />
+      </View>
+
+      <View style={[CustomStyles.inputContainer, { marginTop: 30 }]}>
+        <Text style={CustomStyles.label}>Motivo</Text>
+        <TextInput
+          ref={(input) => {
+            this.textInput1 = input
           }}
-          value={isEnabled}
+          style={CustomStyles.textInput}
+          placeholder="Motivo de la consulta"
+          onChangeText={setMotivo}
+          defaultValue={''}
         />
       </View>
+      <View style={CustomStyles.inputContainer}>
+        <Text style={CustomStyles.label}>Diagnóstico</Text>
+        <TextInput
+          ref={(input) => {
+            this.textInput2 = input
+          }}
+          style={CustomStyles.textInput}
+          placeholder="Diagnóstico a registrar"
+          onChangeText={setDiagnostico}
+          defaultValue={''}
+        />
+      </View>
+
       <View style={[CustomStyles.buttons, { marginTop: 50 }]}>
         <View>
           <Button
             title="Guardar"
             onPress={() => {
-              postPeople(newRecord)
+              postClinicalRecord({
+                paciente: patient,
+                doctor: doctor,
+                categoria: category,
+                fecha: {
+                  day: date.getDate(),
+                  month: date.getMonth(),
+                  year: date.getFullYear()
+                },
+                horaInicio: horario.substring(0, 5),
+                horaFin: horario.substring(6),
+                motivo: motivo,
+                diagnostico: diagnostico
+              })
             }}
             color={CustomStyles.colors.mainBackground}
           />
@@ -221,8 +226,7 @@ const CreateClinicalRecord = ({ route, navigation }) => {
           <Button
             title="Cancelar"
             onPress={() => {
-              setNewRecord({ es_doctor: false })
-              inputTextClear()
+              inputClear()
             }}
             color="grey"
           />

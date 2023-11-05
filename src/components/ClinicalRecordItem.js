@@ -57,9 +57,9 @@ const ClinicalRecordItem = ({
         <Text style={[titleTheme]}>Diagnostico</Text>
         <Text style={[textTheme]}>{diagnostico}</Text>
         <Text style={[titleTheme]}>Fecha</Text>
-        <Text
-          style={[textTheme]}
-        >{`${fecha.day}/${fecha.month}/${fecha.year}`}</Text>
+        <Text style={[textTheme]}>{`${fecha.day}/${fecha.month + 1}/${
+          fecha.year
+        }`}</Text>
         <Text style={[titleTheme]}>Hora</Text>
         <Text style={[textTheme]}>{`${horaInicio}-${horaFin}`}</Text>
       </View>
@@ -86,7 +86,7 @@ const ClinicalRecordItem = ({
           onPress={() =>
             confirm(
               'Eliminar',
-              `Esta seguro de eliminar el registro de ${paciente}?`,
+              `Esta seguro de eliminar esta ficha del paciente ${peopleData[paciente]?.nombre} ${peopleData[paciente]?.apellido}?`,
               deleteClinicalRecord,
               id
             )
