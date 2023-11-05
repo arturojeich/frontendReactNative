@@ -3,9 +3,11 @@ import { SafeAreaView, Button, Text, TouchableOpacity } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { CustomStyles } from '../customStyles/CustomStyles'
 
-const DateTimeItem = ({ date, setDate }) => {
+const DateTimeItem = ({ date, setDate, options }) => {
   const [mode, setMode] = useState('date')
   const [show, setShow] = useState(false)
+  const { width, borderColor, fontColor, fontSize, height, backgroundColor } =
+    options
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate
@@ -26,20 +28,22 @@ const DateTimeItem = ({ date, setDate }) => {
     <SafeAreaView>
       <TouchableOpacity
         style={{
-          backgroundColor: 'white',
+          backgroundColor: backgroundColor,
           fontSize: 26,
-          width: 200,
-          height: 45,
+          width: width,
+          height: height,
           alignSelf: 'center',
           justifyContent: 'center',
           alignItems: 'center',
-          borderColor: CustomStyles.colors.mainBackground,
+          borderColor: borderColor,
           borderWidth: 1,
           borderRadius: 10
         }}
         onPress={showDatepicker}
       >
-        <Text style={{ fontSize: 22 }}>{`${date.getDate()}/${
+        <Text
+          style={{ fontSize: fontSize, color: fontColor }}
+        >{`${date.getDate()}/${
           date.getMonth() + 1
         }/${date.getFullYear()}`}</Text>
       </TouchableOpacity>

@@ -171,7 +171,18 @@ const CreateClinicalRecord = ({ route, navigation }) => {
         ]}
       >
         <Text style={CustomStyles.label}>Fecha:</Text>
-        <DateTimeItem date={date} setDate={setDate} />
+        <DateTimeItem
+          date={date}
+          setDate={setDate}
+          options={{
+            width: 200,
+            height: 45,
+            borderColor: CustomStyles.colors.mainBackground,
+            fontColor: 'black',
+            fontSize: 22,
+            backgroundColor: 'white'
+          }}
+        />
       </View>
 
       <View style={[CustomStyles.inputContainer, { marginTop: 30 }]}>
