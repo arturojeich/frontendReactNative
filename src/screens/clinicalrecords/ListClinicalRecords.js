@@ -18,6 +18,14 @@ const ListClinicalRecords = ({ navigation }) => {
   const peopleKeys = Object.keys(peopleList)
   const categoriesKeys = Object.keys(categoriesList)
 
+  // For the dropdown select options on Create Clinical Record
+  const peopleCategoryLists = {
+    peopleList: peopleList,
+    peopleKeys: peopleKeys,
+    categoriesList: categoriesList,
+    categoriesKeys: categoriesKeys
+  }
+
   useEffect(() => {
     return onValue(
       ref(dbFirebase, '/administracion/fichas'),
@@ -126,6 +134,7 @@ const ListClinicalRecords = ({ navigation }) => {
         navigation={navigation}
         db={dbFirebase}
         screenTypeName={'Agregar Ficha'}
+        extraData={peopleCategoryLists}
       />
     </SafeAreaView>
   )
