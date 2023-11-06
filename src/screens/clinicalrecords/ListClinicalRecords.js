@@ -5,7 +5,8 @@ import {
   ActivityIndicator,
   SafeAreaView,
   Text,
-  Switch
+  Switch,
+  TouchableOpacity
 } from 'react-native'
 import { app } from '../../../firebaseConfig'
 import { getDatabase, ref, onValue } from 'firebase/database'
@@ -13,6 +14,8 @@ import ClinicalRecordItem from '../../components/ClinicalRecordItem'
 import FooterOptions from '../../components/FooterOptions'
 import SearchBar from '../../components/SearchBar'
 import DateTimeItem from '../../components/DateTimeItem'
+import { MaterialIcons } from '@expo/vector-icons'
+import { CustomStyles } from '../../customStyles/CustomStyles'
 
 const ListClinicalRecords = ({ navigation }) => {
   const [dbFirebase, setDBFirebase] = useState(getDatabase(app))
@@ -24,9 +27,11 @@ const ListClinicalRecords = ({ navigation }) => {
   const [clinicalRecordsList, setClinicalRecordsList] = useState({})
   const [peopleList, setPeopleList] = useState({})
   const [categoriesList, setCategoriesList] = useState({})
+  const [appointmentList, setAppointmentList] = useState({})
   const clinicalRecordsKeys = Object.keys(clinicalRecordsList)
   const peopleKeys = Object.keys(peopleList)
   const categoriesKeys = Object.keys(categoriesList)
+  const appointmentKeys = Object.keys(appointmentList)
 
   // new Date(100000000)
   // new Date(3155799999999)
@@ -92,6 +97,17 @@ const ListClinicalRecords = ({ navigation }) => {
         let data = querySnapShot.val() || {}
         let itemList = { ...data }
         setCategoriesList(itemList)
+      }
+    )
+  }, [])
+
+  useEffect(() => {
+    return onValue(
+      ref(dbFirebase, '/administracion/reservas'),
+      (querySnapShot) => {
+        let data = querySnapShot.val() || {}
+        let itemList = { ...data }
+        setAppointmentList(itemList)
       }
     )
   }, [])
@@ -232,6 +248,27 @@ const ListClinicalRecords = ({ navigation }) => {
         screenTypeName={'Agregar Ficha'}
         extraData={peopleCategoryLists}
       />
+      <TouchableOpacity
+        style={[
+          CustomStyles.createButton,
+          { right: 30, bottom: 100, backgroundColor: 'green' }
+        ]}
+        onPress={() =>
+          navigation.navigate('Agregar Ficha (con reserva)', {
+            db: dbFirebase,
+            extraData: {
+              peopleList: peopleCategoryLists.peopleList,
+              peopleKeys: peopleCategoryLists.peopleKeys,
+              categoriesList: peopleCategoryLists.categoriesList,
+              categoriesKeys: peopleCategoryLists.categoriesKeys,
+              appointmentList: appointmentList,
+              appointmentKeys: appointmentKeys
+            }
+          })
+        }
+      >
+        <MaterialIcons name="post-add" size={50} color="white" />
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }

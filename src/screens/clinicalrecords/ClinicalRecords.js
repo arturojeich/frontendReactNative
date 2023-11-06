@@ -17,6 +17,9 @@ const ClinicalRecords = () => {
       key: 'Create Clinical Record'
     },
     {
+      key: 'Create Clinical Record From Appointment'
+    },
+    {
       key: 'Edit Clinical Record'
     }
   ]

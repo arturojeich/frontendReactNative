@@ -44,6 +44,11 @@ export const screenType = {
     iconName: 'add',
     location: require('../screens/clinicalrecords/CreateClinicalRecord')
   },
+  'Create Clinical Record From Appointment': {
+    name: 'Agregar Ficha (con reserva)',
+    iconName: 'add',
+    location: require('../screens/clinicalrecords/CreateFromAppointment')
+  },
   'Edit Clinical Record': {
     name: 'Editar Ficha',
     location: require('../screens/clinicalrecords/EditClinicalRecord')
