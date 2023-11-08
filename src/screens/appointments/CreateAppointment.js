@@ -13,6 +13,7 @@ const CreateAppointment = ({ route, navigation }) => {
   const [doctor, setDoctor] = useState('')
   const [horario, setHorario] = useState('')
   const [date, setDate] = useState(new Date())
+  const [cancelado, setCancelado] = useState(false)
 
   let inputText = ''
 
@@ -27,6 +28,7 @@ const CreateAppointment = ({ route, navigation }) => {
     setDoctor('')
     setHorario('')
     setDate(new Date())
+    setCancelado(false)
   }
 
   const validateAppointment = (newAppointment) => {
@@ -169,7 +171,8 @@ const CreateAppointment = ({ route, navigation }) => {
                   year: date.getFullYear()
                 },
                 horaInicio: horario.substring(0, 5),
-                horaFin: horario.substring(6)
+                horaFin: horario.substring(6),
+                cancelado: false
               })
             }}
             color={CustomStyles.colors.mainBackground}

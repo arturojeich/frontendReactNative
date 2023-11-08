@@ -2,8 +2,9 @@ import React from 'react'
 import { View, Text, StyleSheet, Button } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { CustomStyles } from '../customStyles/CustomStyles'
-import { ref, remove } from 'firebase/database'
+import { ref, remove, set } from 'firebase/database'
 import { confirm } from './Alerts'
+
 
 const AppointmentItem = ({
   AppointmentData,
@@ -26,12 +27,26 @@ const AppointmentItem = ({
     fecha,
     horaFin,
     horaInicio,
-    paciente
+    paciente,
+    cancelado
   } = AppointmentData
+
+    function getEstado(cancelado){
+        if (cancelado){
+            return 'Reserva cancelada'
+        } else {
+            return 'Reserva activa'
+        }
+    }
 
   function deleteAppointment(key) {
     console.log('Delete appointment record, with KEY: ' + key)
-    remove(ref(db, `/administracion/reservas/${key}`))
+    set(ref(db, `/administracion/reservas/${key}/cancelado`), true)
+      .catch((error) => {
+        console.error('Error updating data:', error)
+      })
+
+    //remove(ref(db, `/administracion/reservas/${key}`))
   }
 
   return (
@@ -50,6 +65,8 @@ const AppointmentItem = ({
         }`}</Text>
         <Text style={[titleTheme]}>Hora</Text>
         <Text style={[textTheme]}>{`${horaInicio}-${horaFin}`}</Text>
+        <Text style={[titleTheme]}>Estado</Text>
+        <Text style={[textTheme]}>{`${getEstado(cancelado)}`}</Text>
       </View>
       <View style={[buttons]}>
         <MaterialIcons.Button
@@ -60,7 +77,7 @@ const AppointmentItem = ({
           onPress={() =>
             confirm(
               'Eliminar',
-              `Esta seguro de eliminar esta reserva del paciente ${peopleData[paciente]?.nombre} ${peopleData[paciente]?.apellido}?`,
+              `Esta seguro de que desea cancelar esta reserva del paciente ${peopleData[paciente]?.nombre} ${peopleData[paciente]?.apellido}?`,
               deleteAppointment,
               id
             )
@@ -73,7 +90,7 @@ const AppointmentItem = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: 450,
+    height: 300,
     width: '100%',
     alignSelf: 'center',
     alignItems: 'center',
