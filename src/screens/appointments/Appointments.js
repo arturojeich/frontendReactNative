@@ -1,10 +1,15 @@
-import { NavigationContainer } from '@react-navigation/native'
 import React from 'react'
-import { StyleSheet } from 'react-native'
-import Tabs from '../../components/Tabs'
+import { NavigationContainer } from '@react-navigation/native'
+import MyStack from '../../components/Stack'
+
+import { LogBox } from 'react-native'
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state'
+])
 
 const Appointments = () => {
-  const listTabs = [
+  const listScreens = [
     {
       key: 'List Appointments'
     },
@@ -14,20 +19,9 @@ const Appointments = () => {
   ]
   return (
     <NavigationContainer independent={true}>
-      <Tabs listTabs={listTabs} />
+      <MyStack listScreens={listScreens} />
     </NavigationContainer>
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  text: {
-    color: 'red',
-    fontSize: 40
-  }
-})
 export default Appointments

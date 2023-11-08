@@ -5,7 +5,7 @@ export const screenType = {
     location: require('../screens/appointments/ListAppointments')
   },
   'Create Appointment': {
-    name: 'Create New',
+    name: 'Agregar Reserva',
     iconName: 'add',
     location: require('../screens/appointments/CreateAppointment')
   },
