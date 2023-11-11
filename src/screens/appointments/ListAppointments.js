@@ -18,9 +18,9 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { CustomStyles } from '../../customStyles/CustomStyles'
 
 const startOfToday = () => {
-  let date = new Date();
-  date.setHours(0, 0, 0, 0);
-  return date;
+  let date = new Date()
+  date.setHours(0, 0, 0, 0)
+  return date
 }
 
 const ListAppointments = ({ navigation }) => {
@@ -35,7 +35,6 @@ const ListAppointments = ({ navigation }) => {
   const appointmentRecordsKeys = Object.keys(appointmentsList)
   const peopleKeys = Object.keys(peopleList)
 
-
   // new Date(100000000)
   // new Date(3155799999999)
   // For the toggle switch
@@ -43,8 +42,8 @@ const ListAppointments = ({ navigation }) => {
   const toggleSwitch = () => {
     setIsFilterDate((previousState) => !previousState)
     if (isFilterDate == true) {
-      setStartDate()
-      setEndDate()
+      setStartDate(startOfToday())
+      setEndDate(startOfToday())
       console.log('Ahora es falso, reset fechas')
     }
   }
@@ -99,8 +98,7 @@ const ListAppointments = ({ navigation }) => {
     return (
       <ScrollView>
         <View>
-          {appointmentRecordsKeys.length > 0 &&
-          peopleKeys.length > 0 ? (
+          {appointmentRecordsKeys.length > 0 && peopleKeys.length > 0 ? (
             <>
               {appointmentRecordsKeys.map((key) => {
                 if (
@@ -108,16 +106,12 @@ const ListAppointments = ({ navigation }) => {
                   (!searchFlag ||
                     (searchFlag &&
                       searchText(
-                        `${
-                          peopleList[appointmentsList[key].doctor].nombre
-                        } ${
+                        `${peopleList[appointmentsList[key].doctor].nombre} ${
                           peopleList[appointmentsList[key].doctor].apellido
                         }`
                       )) ||
                     searchText(
-                      `${
-                        peopleList[appointmentsList[key].paciente].nombre
-                      } ${
+                      `${peopleList[appointmentsList[key].paciente].nombre} ${
                         peopleList[appointmentsList[key].paciente].apellido
                       }`
                     ))
