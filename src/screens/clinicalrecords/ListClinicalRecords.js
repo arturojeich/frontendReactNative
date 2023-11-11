@@ -16,6 +16,10 @@ import SearchBar from '../../components/SearchBar'
 import DateTimeItem from '../../components/DateTimeItem'
 import { MaterialIcons } from '@expo/vector-icons'
 import { CustomStyles } from '../../customStyles/CustomStyles'
+//import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import { printToFileAsync } from 'expo-print'
+import { shareAsync } from 'expo-sharing'
+
 
 const ListClinicalRecords = ({ navigation }) => {
   const [dbFirebase, setDBFirebase] = useState(getDatabase(app))
@@ -174,6 +178,101 @@ const ListClinicalRecords = ({ navigation }) => {
     )
   }
 
+function GetAllClinicalRecordsExport() {
+    let recordsArray = [];
+
+    if (clinicalRecordsKeys.length > 0 && peopleKeys.length > 0 && categoriesKeys.length > 0) {
+        clinicalRecordsKeys.forEach((key) => {
+            if (
+                checkDates(clinicalRecordsList[key].fecha) &&
+                (!searchFlag ||
+                    (searchFlag &&
+                        searchText(
+                            `${
+                                peopleList[clinicalRecordsList[key].doctor].nombre
+                            } ${
+                                peopleList[clinicalRecordsList[key].doctor].apellido
+                            }`
+                        )) ||
+                    searchText(
+                        `${
+                            peopleList[clinicalRecordsList[key].paciente].nombre
+                        } ${
+                            peopleList[clinicalRecordsList[key].paciente].apellido
+                        }`
+                    ) ||
+                    searchText(
+                        `${
+                            categoriesList[clinicalRecordsList[key].categoria]
+                                .descripcion
+                        }`
+                    ))
+            ) {
+                recordsArray.push({
+                    categoria: categoriesList[clinicalRecordsList[key].categoria].descripcion,
+                    diagnostico: clinicalRecordsList[key].diagnostico,
+                    doctor: peopleList[clinicalRecordsList[key].doctor].nombre + ' ' + peopleList[clinicalRecordsList[key].doctor].apellido,
+                    fecha: clinicalRecordsList[key].fecha.day + '-' + clinicalRecordsList[key].fecha.month + '-' + clinicalRecordsList[key].fecha.year,
+                    horaFin: clinicalRecordsList[key].horaFin,
+                    horaInicio: clinicalRecordsList[key].horaInicio,
+                    motivo: clinicalRecordsList[key].motivo,
+                    paciente: peopleList[clinicalRecordsList[key].paciente].nombre + ' ' + peopleList[clinicalRecordsList[key].paciente].apellido,
+                });
+            }
+        });
+    }
+
+    return recordsArray;
+}
+
+
+  /*const html = `
+      <html>
+        <body>
+          <h1>Hi</h1>
+          <p style="color: red;">Hello. Bonjour. Hola.</p>
+        </body>
+      </html>
+    `;*/
+
+function generateHTML(recordsArray) {
+    let html = '<html><body>';
+    recordsArray.forEach((record) => {
+        html += `<h1>Paciente: ${record.paciente}</h1>`;
+        html += `<p>Categoria: ${record.categoria}</p>`;
+        html += `<p>Diagnostico: ${record.diagnostico}</p>`;
+        html += `<p>Doctor: ${record.doctor}</p>`;
+        html += `<p>Fecha: ${record.fecha}</p>`;
+        html += `<p>Hora Inicio: ${record.horaInicio}</p>`;
+        html += `<p>Hora Fin: ${record.horaFin}</p>`;
+        html += `<p>Motivo: ${record.motivo}</p>`;
+    });
+    html += '</body></html>';
+    return html;
+}
+
+
+    let createPDF = async () => {
+      /*let options = {
+        html: '<h1>PDF TEST</h1><p>This is an example PDF.</p>', // replace with your HTML
+        fileName: 'test',
+        directory: 'Documents',
+      };
+
+      let file = await RNHTMLtoPDF.convert(options);
+      // console.log(file.filePath);
+      alert(file.filePath);*/
+      const html = generateHTML(GetAllClinicalRecordsExport())
+      //console.log(GetAllClinicalRecordsExport())
+      const file = await printToFileAsync({
+            html: html,
+            base64: false
+          });
+
+          await shareAsync(file.uri);
+    };
+
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View>
@@ -269,6 +368,15 @@ const ListClinicalRecords = ({ navigation }) => {
       >
         <MaterialIcons name="post-add" size={50} color="white" />
       </TouchableOpacity>
+    <TouchableOpacity
+          style={[
+            CustomStyles.createButton,
+            { right: 30, bottom: 170, backgroundColor: 'blue' } // adjust the position and color as needed
+          ]}
+          onPress={createPDF}
+        >
+          <MaterialIcons name="picture-as-pdf" size={50} color="white" />
+        </TouchableOpacity>
     </SafeAreaView>
   )
 }
