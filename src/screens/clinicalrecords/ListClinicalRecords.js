@@ -229,31 +229,29 @@ function GetAllClinicalRecordsExport() {
 
     const generateExcel = () => {
         let recordsArray = GetAllClinicalRecordsExport();
-        //console.log(recordsArray);
-
         let wb = XLSX.utils.book_new();
-
-        // Create an array for the headers
         let ws_data = [["Categoría", "Diagnóstico", "Doctor", "Fecha", "horaFin", "horaInicio", "Motivo", "Paciente"]];
-
-        // Convert each record to an array and add it to ws_data
         for(let record of recordsArray) {
             ws_data.push([record.categoria, record.diagnostico, record.doctor, record.fecha, record.horaFin, record.horaInicio, record.motivo, record.paciente]);
         }
-
-        console.log(ws_data)
-
         let ws = XLSX.utils.aoa_to_sheet(ws_data);
         XLSX.utils.book_append_sheet(wb, ws, "MyFirstSheet", true);
-
         const base64 = XLSX.write(wb, { type: "base64" });
-        const filename = FileSystem.documentDirectory + "MyExcel2.xlsx";
-        FileSystem.writeAsStringAsync(filename, base64, {
+
+        let min = 0; // The minimum number you want
+        let max = 9999999; // The maximum number you want
+        let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        let filename = FileSystem.documentDirectory + "MyExcel" + randomNumber.toString() + ".xlsx";
+
+        FileSystem.deleteAsync(filename, { idempotent: true }).then(() => {
+          FileSystem.writeAsStringAsync(filename, base64, {
             encoding: FileSystem.EncodingType.Base64
-        }).then(() => {
+          }).then(() => {
             Sharing.shareAsync(filename);
+          });
         });
     };
+
 
 
 function generateHTML(recordsArray) {
@@ -405,7 +403,7 @@ function generateHTML(recordsArray) {
         ]}
         onPress={generateExcel}
         >
-        <MaterialIcons name="table-rows" size={50} color="white" />
+        <MaterialIcons name="insert-chart-outlined" size={50} color="white" />
         </TouchableOpacity>
     </SafeAreaView>
   )
