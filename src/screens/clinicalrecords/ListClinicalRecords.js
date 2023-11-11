@@ -16,9 +16,11 @@ import SearchBar from '../../components/SearchBar'
 import DateTimeItem from '../../components/DateTimeItem'
 import { MaterialIcons } from '@expo/vector-icons'
 import { CustomStyles } from '../../customStyles/CustomStyles'
-//import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import * as XLSX from 'xlsx'
+import * as FileSystem from 'expo-file-system'
 import { printToFileAsync } from 'expo-print'
 import { shareAsync } from 'expo-sharing'
+import * as Sharing from 'expo-sharing';
 
 
 const ListClinicalRecords = ({ navigation }) => {
@@ -225,15 +227,34 @@ function GetAllClinicalRecordsExport() {
     return recordsArray;
 }
 
+    const generateExcel = () => {
+        let recordsArray = GetAllClinicalRecordsExport();
+        //console.log(recordsArray);
 
-  /*const html = `
-      <html>
-        <body>
-          <h1>Hi</h1>
-          <p style="color: red;">Hello. Bonjour. Hola.</p>
-        </body>
-      </html>
-    `;*/
+        let wb = XLSX.utils.book_new();
+
+        // Create an array for the headers
+        let ws_data = [["Categoría", "Diagnóstico", "Doctor", "Fecha", "horaFin", "horaInicio", "Motivo", "Paciente"]];
+
+        // Convert each record to an array and add it to ws_data
+        for(let record of recordsArray) {
+            ws_data.push([record.categoria, record.diagnostico, record.doctor, record.fecha, record.horaFin, record.horaInicio, record.motivo, record.paciente]);
+        }
+
+        console.log(ws_data)
+
+        let ws = XLSX.utils.aoa_to_sheet(ws_data);
+        XLSX.utils.book_append_sheet(wb, ws, "MyFirstSheet", true);
+
+        const base64 = XLSX.write(wb, { type: "base64" });
+        const filename = FileSystem.documentDirectory + "MyExcel2.xlsx";
+        FileSystem.writeAsStringAsync(filename, base64, {
+            encoding: FileSystem.EncodingType.Base64
+        }).then(() => {
+            Sharing.shareAsync(filename);
+        });
+    };
+
 
 function generateHTML(recordsArray) {
     let html = '<html><body>';
@@ -376,6 +397,15 @@ function generateHTML(recordsArray) {
           onPress={createPDF}
         >
           <MaterialIcons name="picture-as-pdf" size={50} color="white" />
+        </TouchableOpacity>
+    <TouchableOpacity
+        style={[
+            CustomStyles.createButton,
+            { right: 30, bottom: 240, backgroundColor: 'orange' } // adjust the position and color as needed
+        ]}
+        onPress={generateExcel}
+        >
+        <MaterialIcons name="table-rows" size={50} color="white" />
         </TouchableOpacity>
     </SafeAreaView>
   )
