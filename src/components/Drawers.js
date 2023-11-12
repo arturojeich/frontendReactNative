@@ -3,11 +3,15 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import { StyleSheet, Text, View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import ClinicalRecords from '../screens/clinicalrecords/ClinicalRecords'
 import Appointments from '../screens/appointments/Appointments'
 import Categories from '../screens/categories/Categories'
 import People from '../screens/people/People'
-import { CustomStyles as style } from '../customStyles/CustomStyles'
+import {
+  CustomStyles,
+  CustomStyles as style
+} from '../customStyles/CustomStyles'
 
 const Drawer = createDrawerNavigator()
 
@@ -30,6 +34,29 @@ const Drawers = () => {
         drawerActiveTintColor: style.colors.mainText
       }}
     >
+      <Drawer.Screen
+        name="Home"
+        component={Appointments}
+        options={{
+          drawerIcon: () => (
+            <MaterialCommunityIcons
+              name="view-dashboard"
+              size={54}
+              color="black"
+            />
+          ),
+          headerPressOpacity: 1,
+          headerPressColor: style.colors.mainBackground,
+          drawerActiveBackgroundColor: style.colors.mainBackground,
+          drawerLabelStyle: {
+            height: 80,
+            alignSelf: 'center',
+            fontSize: 35,
+            textAlignVertical: 'center',
+            color: 'black'
+          }
+        }}
+      />
       <Drawer.Screen
         name="Appointments"
         component={Appointments}
