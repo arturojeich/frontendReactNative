@@ -64,7 +64,7 @@ const ClinicalRecordItem = ({
         <Text style={[textTheme]}>{`${horaInicio}-${horaFin}`}</Text>
       </View>
       <View style={[buttons]}>
-        <MaterialIcons.Button
+        {/*  <MaterialIcons.Button
           name="edit"
           size={26}
           color="black"
@@ -77,7 +77,7 @@ const ClinicalRecordItem = ({
               clinicalRecordData: clinicalRecordData
             })
           }}
-        />
+        />*/}
         <MaterialIcons.Button
           name="delete"
           size={26}

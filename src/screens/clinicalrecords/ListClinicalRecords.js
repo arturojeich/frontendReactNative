@@ -20,16 +20,21 @@ import * as XLSX from 'xlsx'
 import * as FileSystem from 'expo-file-system'
 import { printToFileAsync } from 'expo-print'
 import { shareAsync } from 'expo-sharing'
-import * as Sharing from 'expo-sharing';
+import * as Sharing from 'expo-sharing'
 
+const startOfToday = () => {
+  let date = new Date()
+  date.setHours(0, 0, 0, 0)
+  return date
+}
 
 const ListClinicalRecords = ({ navigation }) => {
   const [dbFirebase, setDBFirebase] = useState(getDatabase(app))
   const [searchPhrase, setSearchPhrase] = useState('')
   const [clicked, setClicked] = useState(false)
   const [searchFlag, setSearchFlag] = useState(false)
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+  const [startDate, setStartDate] = useState(startOfToday())
+  const [endDate, setEndDate] = useState(startOfToday())
   const [clinicalRecordsList, setClinicalRecordsList] = useState({})
   const [peopleList, setPeopleList] = useState({})
   const [categoriesList, setCategoriesList] = useState({})
@@ -46,8 +51,8 @@ const ListClinicalRecords = ({ navigation }) => {
   const toggleSwitch = () => {
     setIsFilterDate((previousState) => !previousState)
     if (isFilterDate == true) {
-      setStartDate(new Date())
-      setEndDate(new Date())
+      setStartDate(startOfToday())
+      setEndDate(startOfToday())
       console.log('Ahora es falso, reset fechas')
     }
   }
@@ -180,99 +185,131 @@ const ListClinicalRecords = ({ navigation }) => {
     )
   }
 
-function GetAllClinicalRecordsExport() {
-    let recordsArray = [];
+  function GetAllClinicalRecordsExport() {
+    let recordsArray = []
 
-    if (clinicalRecordsKeys.length > 0 && peopleKeys.length > 0 && categoriesKeys.length > 0) {
-        clinicalRecordsKeys.forEach((key) => {
-            if (
-                checkDates(clinicalRecordsList[key].fecha) &&
-                (!searchFlag ||
-                    (searchFlag &&
-                        searchText(
-                            `${
-                                peopleList[clinicalRecordsList[key].doctor].nombre
-                            } ${
-                                peopleList[clinicalRecordsList[key].doctor].apellido
-                            }`
-                        )) ||
-                    searchText(
-                        `${
-                            peopleList[clinicalRecordsList[key].paciente].nombre
-                        } ${
-                            peopleList[clinicalRecordsList[key].paciente].apellido
-                        }`
-                    ) ||
-                    searchText(
-                        `${
-                            categoriesList[clinicalRecordsList[key].categoria]
-                                .descripcion
-                        }`
-                    ))
-            ) {
-                recordsArray.push({
-                    categoria: categoriesList[clinicalRecordsList[key].categoria].descripcion,
-                    diagnostico: clinicalRecordsList[key].diagnostico,
-                    doctor: peopleList[clinicalRecordsList[key].doctor].nombre + ' ' + peopleList[clinicalRecordsList[key].doctor].apellido,
-                    fecha: clinicalRecordsList[key].fecha.day + '-' + clinicalRecordsList[key].fecha.month + '-' + clinicalRecordsList[key].fecha.year,
-                    horaFin: clinicalRecordsList[key].horaFin,
-                    horaInicio: clinicalRecordsList[key].horaInicio,
-                    motivo: clinicalRecordsList[key].motivo,
-                    paciente: peopleList[clinicalRecordsList[key].paciente].nombre + ' ' + peopleList[clinicalRecordsList[key].paciente].apellido,
-                });
-            }
-        });
+    if (
+      clinicalRecordsKeys.length > 0 &&
+      peopleKeys.length > 0 &&
+      categoriesKeys.length > 0
+    ) {
+      clinicalRecordsKeys.forEach((key) => {
+        if (
+          checkDates(clinicalRecordsList[key].fecha) &&
+          (!searchFlag ||
+            (searchFlag &&
+              searchText(
+                `${peopleList[clinicalRecordsList[key].doctor].nombre} ${
+                  peopleList[clinicalRecordsList[key].doctor].apellido
+                }`
+              )) ||
+            searchText(
+              `${peopleList[clinicalRecordsList[key].paciente].nombre} ${
+                peopleList[clinicalRecordsList[key].paciente].apellido
+              }`
+            ) ||
+            searchText(
+              `${
+                categoriesList[clinicalRecordsList[key].categoria].descripcion
+              }`
+            ))
+        ) {
+          recordsArray.push({
+            categoria:
+              categoriesList[clinicalRecordsList[key].categoria].descripcion,
+            diagnostico: clinicalRecordsList[key].diagnostico,
+            doctor:
+              peopleList[clinicalRecordsList[key].doctor].nombre +
+              ' ' +
+              peopleList[clinicalRecordsList[key].doctor].apellido,
+            fecha:
+              clinicalRecordsList[key].fecha.day +
+              '-' +
+              clinicalRecordsList[key].fecha.month +
+              '-' +
+              clinicalRecordsList[key].fecha.year,
+            horaFin: clinicalRecordsList[key].horaFin,
+            horaInicio: clinicalRecordsList[key].horaInicio,
+            motivo: clinicalRecordsList[key].motivo,
+            paciente:
+              peopleList[clinicalRecordsList[key].paciente].nombre +
+              ' ' +
+              peopleList[clinicalRecordsList[key].paciente].apellido
+          })
+        }
+      })
     }
 
-    return recordsArray;
-}
+    return recordsArray
+  }
 
-    const generateExcel = () => {
-        let recordsArray = GetAllClinicalRecordsExport();
-        let wb = XLSX.utils.book_new();
-        let ws_data = [["Categoría", "Diagnóstico", "Doctor", "Fecha", "horaFin", "horaInicio", "Motivo", "Paciente"]];
-        for(let record of recordsArray) {
-            ws_data.push([record.categoria, record.diagnostico, record.doctor, record.fecha, record.horaFin, record.horaInicio, record.motivo, record.paciente]);
-        }
-        let ws = XLSX.utils.aoa_to_sheet(ws_data);
-        XLSX.utils.book_append_sheet(wb, ws, "MyFirstSheet", true);
-        const base64 = XLSX.write(wb, { type: "base64" });
+  const generateExcel = () => {
+    let recordsArray = GetAllClinicalRecordsExport()
+    let wb = XLSX.utils.book_new()
+    let ws_data = [
+      [
+        'Categoría',
+        'Diagnóstico',
+        'Doctor',
+        'Fecha',
+        'horaFin',
+        'horaInicio',
+        'Motivo',
+        'Paciente'
+      ]
+    ]
+    for (let record of recordsArray) {
+      ws_data.push([
+        record.categoria,
+        record.diagnostico,
+        record.doctor,
+        record.fecha,
+        record.horaFin,
+        record.horaInicio,
+        record.motivo,
+        record.paciente
+      ])
+    }
+    let ws = XLSX.utils.aoa_to_sheet(ws_data)
+    XLSX.utils.book_append_sheet(wb, ws, 'MyFirstSheet', true)
+    const base64 = XLSX.write(wb, { type: 'base64' })
 
-        let min = 0; // The minimum number you want
-        let max = 9999999; // The maximum number you want
-        let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-        let filename = FileSystem.documentDirectory + "MyExcel" + randomNumber.toString() + ".xlsx";
+    let min = 0 // The minimum number you want
+    let max = 9999999 // The maximum number you want
+    let randomNumber = Math.floor(Math.random() * (max - min + 1)) + min
+    let filename =
+      FileSystem.documentDirectory +
+      'MyExcel' +
+      randomNumber.toString() +
+      '.xlsx'
 
-        FileSystem.deleteAsync(filename, { idempotent: true }).then(() => {
-          FileSystem.writeAsStringAsync(filename, base64, {
-            encoding: FileSystem.EncodingType.Base64
-          }).then(() => {
-            Sharing.shareAsync(filename);
-          });
-        });
-    };
+    FileSystem.deleteAsync(filename, { idempotent: true }).then(() => {
+      FileSystem.writeAsStringAsync(filename, base64, {
+        encoding: FileSystem.EncodingType.Base64
+      }).then(() => {
+        Sharing.shareAsync(filename)
+      })
+    })
+  }
 
-
-
-function generateHTML(recordsArray) {
-    let html = '<html><body>';
+  function generateHTML(recordsArray) {
+    let html = '<html><body>'
     recordsArray.forEach((record) => {
-        html += `<h1>Paciente: ${record.paciente}</h1>`;
-        html += `<p>Categoria: ${record.categoria}</p>`;
-        html += `<p>Diagnostico: ${record.diagnostico}</p>`;
-        html += `<p>Doctor: ${record.doctor}</p>`;
-        html += `<p>Fecha: ${record.fecha}</p>`;
-        html += `<p>Hora Inicio: ${record.horaInicio}</p>`;
-        html += `<p>Hora Fin: ${record.horaFin}</p>`;
-        html += `<p>Motivo: ${record.motivo}</p>`;
-    });
-    html += '</body></html>';
-    return html;
-}
+      html += `<h1>Paciente: ${record.paciente}</h1>`
+      html += `<p>Categoria: ${record.categoria}</p>`
+      html += `<p>Diagnostico: ${record.diagnostico}</p>`
+      html += `<p>Doctor: ${record.doctor}</p>`
+      html += `<p>Fecha: ${record.fecha}</p>`
+      html += `<p>Hora Inicio: ${record.horaInicio}</p>`
+      html += `<p>Hora Fin: ${record.horaFin}</p>`
+      html += `<p>Motivo: ${record.motivo}</p>`
+    })
+    html += '</body></html>'
+    return html
+  }
 
-
-    let createPDF = async () => {
-      /*let options = {
+  let createPDF = async () => {
+    /*let options = {
         html: '<h1>PDF TEST</h1><p>This is an example PDF.</p>', // replace with your HTML
         fileName: 'test',
         directory: 'Documents',
@@ -281,16 +318,15 @@ function generateHTML(recordsArray) {
       let file = await RNHTMLtoPDF.convert(options);
       // console.log(file.filePath);
       alert(file.filePath);*/
-      const html = generateHTML(GetAllClinicalRecordsExport())
-      //console.log(GetAllClinicalRecordsExport())
-      const file = await printToFileAsync({
-            html: html,
-            base64: false
-          });
+    const html = generateHTML(GetAllClinicalRecordsExport())
+    //console.log(GetAllClinicalRecordsExport())
+    const file = await printToFileAsync({
+      html: html,
+      base64: false
+    })
 
-          await shareAsync(file.uri);
-    };
-
+    await shareAsync(file.uri)
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -387,24 +423,24 @@ function generateHTML(recordsArray) {
       >
         <MaterialIcons name="post-add" size={50} color="white" />
       </TouchableOpacity>
-    <TouchableOpacity
-          style={[
-            CustomStyles.createButton,
-            { right: 30, bottom: 170, backgroundColor: 'blue' } // adjust the position and color as needed
-          ]}
-          onPress={createPDF}
-        >
-          <MaterialIcons name="picture-as-pdf" size={50} color="white" />
-        </TouchableOpacity>
-    <TouchableOpacity
+      <TouchableOpacity
         style={[
-            CustomStyles.createButton,
-            { right: 30, bottom: 240, backgroundColor: 'orange' } // adjust the position and color as needed
+          CustomStyles.createButton,
+          { right: 30, bottom: 170, backgroundColor: 'blue' } // adjust the position and color as needed
+        ]}
+        onPress={createPDF}
+      >
+        <MaterialIcons name="picture-as-pdf" size={50} color="white" />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[
+          CustomStyles.createButton,
+          { right: 30, bottom: 240, backgroundColor: 'orange' } // adjust the position and color as needed
         ]}
         onPress={generateExcel}
-        >
+      >
         <MaterialIcons name="insert-chart-outlined" size={50} color="white" />
-        </TouchableOpacity>
+      </TouchableOpacity>
     </SafeAreaView>
   )
 }
