@@ -71,7 +71,7 @@ const CreateFromAppointment = ({ route, navigation }) => {
   function filterAppointment() {
     let arr = []
     appointmentKeys.forEach((key) => {
-      if (appointmentList[key].cancelada == false) {
+      if (appointmentList[key].cancelado == false) {
         arr.push({
           value: key,
           label: `${peopleList[appointmentList[key]?.paciente]?.nombre} ${
@@ -209,7 +209,9 @@ const CreateFromAppointment = ({ route, navigation }) => {
 
         {appointment !== '' ? (
           <Text style={CustomStyles.textInput}>
-            {`${appointmentList[appointment].fecha.day}/${appointmentList[appointment].fecha.month}/${appointmentList[appointment].fecha.year}`}
+            {`${appointmentList[appointment].fecha.day}/${
+              appointmentList[appointment].fecha.month + 1
+            }/${appointmentList[appointment].fecha.year}`}
           </Text>
         ) : (
           <Text style={CustomStyles.textInput}>{''}</Text>
