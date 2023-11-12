@@ -181,6 +181,7 @@ const ListClinicalRecords = ({ navigation }) => {
             <ActivityIndicator size={'large'} color={`black`} />
           )}
         </View>
+        <View style={{ height: 90 }} />
       </ScrollView>
     )
   }
