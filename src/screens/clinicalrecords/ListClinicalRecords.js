@@ -14,7 +14,7 @@ import ClinicalRecordItem from '../../components/ClinicalRecordItem'
 import FooterOptions from '../../components/FooterOptions'
 import SearchBar from '../../components/SearchBar'
 import DateTimeItem from '../../components/DateTimeItem'
-import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { CustomStyles } from '../../customStyles/CustomStyles'
 import * as XLSX from 'xlsx'
 import * as FileSystem from 'expo-file-system'
@@ -440,7 +440,11 @@ const ListClinicalRecords = ({ navigation }) => {
         ]}
         onPress={generateExcel}
       >
-        <MaterialIcons name="insert-chart-outlined" size={50} color="white" />
+        <MaterialCommunityIcons
+          name="microsoft-excel"
+          size={50}
+          color="white"
+        />
       </TouchableOpacity>
     </SafeAreaView>
   )
